@@ -86,6 +86,30 @@ public class MatrixUtils {
         return result;
     }
 
+    public static double[][] multiplyMatrices(double[][] a, double[][] b) {
+        // Проверка возможности умножения
+        if (a[0].length != b.length) {
+            throw new IllegalArgumentException(
+                    "Несовместимые размеры матриц: a[0].length != b.length");
+        }
+
+        int m = a.length;    // Количество строк первой матрицы
+        int n = a[0].length; // Количество столбцов первой матрицы (и строк второй)
+        int p = b[0].length; // Количество столбцов второй матрицы
+
+        double[][] result = new double[m][p];
+
+        for (int i = 0; i < m; i++) {         // По строкам первой матрицы
+            for (int j = 0; j < p; j++) {     // По столбцам второй матрицы
+                for (int k = 0; k < n; k++) { // По элементам в строке/столбце
+                    result[i][j] += a[i][k] * b[k][j];
+                }
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Возвращает результат перемножения матрицы на вектор
      * @param matrix матрица
@@ -149,7 +173,7 @@ public class MatrixUtils {
     }
 
     /**
-     * Вычесть два вектора
+     * Разность двух векторов
      * @param vector1 уменьшаемое
      * @param vector2 вычитаемое
      * @return разность
@@ -172,6 +196,33 @@ public class MatrixUtils {
     }
 
     /**
+     * Разность двух матриц
+     * @param matrix1 уменьшаемое
+     * @param matrix2 вычитаемое
+     * @return разность
+     */
+    public static double[][] subtraction(double[][] matrix1, double[][] matrix2) {
+        int n = matrix1.length;
+        int m = matrix1[0].length;
+        int p = matrix2.length;
+        int q = matrix2[0].length;
+
+        if (n != p && m != q) {
+            throw new IllegalArgumentException("Matrix lengths do not match");
+        }
+
+        double[][] result = new double[n][m];
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                result[i][j] = matrix1[i][j] - matrix2[i][j];
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Сложение двух векторов
      * @param vector1 первое слагаемое
      * @param vector2 второе слагаемое
@@ -188,6 +239,70 @@ public class MatrixUtils {
         double[] result = new double[n];
         for (int i = 0; i < n; ++i) {
             result[i] = vector1[i] + vector2[i];
+        }
+
+        return result;
+    }
+
+    /**
+     * Транспонирование матрицы
+     * @param matrix матрица
+     * @return транспонированная матрица
+     */
+    public static double[][] transpose(double[][] matrix) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+
+        double[][] result = new double[m][n];
+
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                result[i][j] = matrix[j][i];
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Скалярное произведение двух векторов
+     * @param vector1 первый множитель
+     * @param vector2 второй множитель
+     * @return результат умножения
+     */
+    public static double scalarMultiply(double[] vector1, double[] vector2) {
+        int n = vector1.length;
+        int m = vector2.length;
+
+        if (n != m) {
+            throw new IllegalArgumentException("Vector lengths do not match");
+
+        }
+
+        double result = 0;
+        for (int i = 0; i < n; ++i) {
+            result += vector1[i] * vector2[i];
+        }
+
+        return result;
+    }
+
+    /**
+     * Умножение матрицы на число
+     * @param matrix матрица
+     * @param number число
+     * @return результат умножения
+     */
+    public static double[][] multiplyByNumber(double[][] matrix, double number) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+
+        double[][] result = new double[n][m];
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                result[i][j] = matrix[i][j] * number;
+            }
         }
 
         return result;
