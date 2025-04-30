@@ -40,30 +40,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.A.executor": "Run",
-    "Application.B.executor": "Run",
-    "Application.C.executor": "Run",
-    "Application.D.executor": "Run",
-    "Application.E.executor": "Run",
-    "Application.JacobiEigen.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.С.executor": "Run",
-    "JUnit.MainTest.transformMatrix.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/programming/mai-numeric-methods/lab01",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.A.executor&quot;: &quot;Run&quot;,
+    &quot;Application.B.executor&quot;: &quot;Run&quot;,
+    &quot;Application.C.executor&quot;: &quot;Run&quot;,
+    &quot;Application.D.executor&quot;: &quot;Run&quot;,
+    &quot;Application.E.executor&quot;: &quot;Run&quot;,
+    &quot;Application.JacobiEigen.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.С.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MainTest.transformMatrix.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/programming/mai-numeric-methods/lab01&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="cat.mood" />
@@ -178,6 +178,8 @@
       <workItem from="1742364119015" duration="8844000" />
       <workItem from="1742661238641" duration="5000" />
       <workItem from="1743534958070" duration="3584000" />
+      <workItem from="1743573709810" duration="1239000" />
+      <workItem from="1745993445355" duration="1343000" />
     </task>
     <servers />
   </component>

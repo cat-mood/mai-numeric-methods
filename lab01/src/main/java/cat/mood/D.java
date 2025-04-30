@@ -97,7 +97,7 @@ public class D {
 //                {1, 3, 6}
 //        };
 
-        var result = jacobiRotation(matrix, 0.01);
+        var result = jacobiRotation(matrix, 0.000001);
         System.out.println("Диагональная матрица:");
         printMatrix(result.first);
         System.out.println("Матрица собственных векторов:");

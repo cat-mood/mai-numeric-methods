@@ -9,8 +9,11 @@ public class A {
     }
 
     public static double secondDerivative(Function<Double, Double> f, double x, double eps) {
-        double dy = f.apply(x + eps) - 2 * f.apply(x) + f.apply(x - eps);
-        return dy / (eps * eps);
+        double fPlus = f.apply(x + eps);
+        double fMinus = f.apply(x - eps);
+        double fCenter = f.apply(x);
+
+        return (fPlus - 2 * fCenter + fMinus) / (eps * eps);
     }
 
     public static boolean checkFunction(Function<Double, Double> phi, double eps, double a, double b) {
@@ -37,10 +40,14 @@ public class A {
 
         double prev = a;
         double cur = phi.apply(prev);
+        int iters = 1;
         while (Math.abs(cur - prev) > eps) {
             prev = cur;
             cur = phi.apply(prev);
+            ++iters;
         }
+
+        System.out.println("Количество итераций: " + iters);
 
         return cur;
     }
@@ -50,29 +57,33 @@ public class A {
             throw new RuntimeException("Не выполнено условие сходимости");
         }
 
-        double prev = a;
-        while (prev < b) {
+        double prev = b;
+        while (prev > a) {
             if (f.apply(prev) * secondDerivative(f, prev, eps) > 0) {
                 break;
             }
-            prev += eps;
+            prev -= eps;
         }
         if (f.apply(prev) * secondDerivative(f, prev, eps) <= 0) {
             throw new RuntimeException("Не выполнено условие сходимости");
         }
+        int iters = 1;
         double cur = prev - f.apply(prev) / derivative(f, prev, eps);
         while (Math.abs(cur - prev) > eps) {
             prev = cur;
             cur = prev - f.apply(prev) / derivative(f, prev, eps);
+            ++iters;
         }
+
+        System.out.println("Количество итераций: " + iters);
 
         return cur;
     }
 
     public static void main(String[] args) {
         System.out.println("Метод простой итерации:");
-        System.out.println(iteration(x -> (Math.pow(2 * x + 1, 0.25)), 0.0001, 0, 2));
+        System.out.println(iteration(x -> (Math.pow(2 * x + 1, 0.25)), 0.000001, 0, 2));
         System.out.println("Метод Ньютона:");
-        System.out.println(newton(x -> (Math.pow(x, 4) - 2 * x - 1), 0.0001, 0, 2));
+        System.out.println(newton(x -> (Math.pow(x, 4) - 2 * x - 1), 0.000001, 0, 2));
     }
 }

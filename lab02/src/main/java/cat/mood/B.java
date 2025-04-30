@@ -102,7 +102,6 @@ public class B {
             }
         }
 
-        System.out.println("Условие сходимости выполнено (||J|| < 1).");
         return true;
     }
 
