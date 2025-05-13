@@ -4,8 +4,13 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
 
 public class LeastSquaresApproximation {
 
@@ -113,17 +118,15 @@ public class LeastSquaresApproximation {
             originalSeries.add(x[i], y[i]);
         }
 
-        XYSeries linearSeries = new XYSeries("Линейная аппроксимация");
-        XYSeries quadraticSeries = new XYSeries("Квадратичная аппроксимация");
+        XYSeries linearSeries = new XYSeries("Линейная аппроксимация (красный)");
+        XYSeries quadraticSeries = new XYSeries("Квадратичная аппроксимация (синий)");
 
         double minX = x[0];
         double maxX = x[x.length - 1];
         for (double xi = minX; xi <= maxX; xi += 0.1) {
-            // Линейная аппроксимация
             double linearY = linearCoeffs[0] + linearCoeffs[1] * xi;
             linearSeries.add(xi, linearY);
 
-            // Квадратичная аппроксимация
             double quadraticY = quadraticCoeffs[0] + quadraticCoeffs[1] * xi + quadraticCoeffs[2] * xi * xi;
             quadraticSeries.add(xi, quadraticY);
         }
@@ -143,6 +146,29 @@ public class LeastSquaresApproximation {
                 true,
                 false
         );
+
+        XYPlot plot = chart.getXYPlot();
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+
+        // Настройки для исходных данных (чёрные точки)
+        renderer.setSeriesPaint(0, Color.BLACK);
+        renderer.setSeriesLinesVisible(0, false);
+        renderer.setSeriesShapesVisible(0, true);
+        renderer.setSeriesShape(0, new Ellipse2D.Double(-3, -3, 6, 6)); // Круглые точки
+
+        // Настройки для линейной аппроксимации (красная линия)
+        renderer.setSeriesPaint(1, Color.RED);
+        renderer.setSeriesLinesVisible(1, true);
+        renderer.setSeriesShapesVisible(1, false);
+        renderer.setSeriesStroke(1, new BasicStroke(2.0f)); // Толщина линии
+
+        // Настройки для квадратичной аппроксимации (синяя линия)
+        renderer.setSeriesPaint(2, Color.BLUE);
+        renderer.setSeriesLinesVisible(2, true);
+        renderer.setSeriesShapesVisible(2, false);
+        renderer.setSeriesStroke(2, new BasicStroke(2.0f));
+
+        plot.setRenderer(renderer);
 
         ChartFrame frame = new ChartFrame("Графики аппроксимации", chart);
         frame.pack();
