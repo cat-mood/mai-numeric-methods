@@ -16,6 +16,7 @@ public class B {
      * @return вектор решений
      */
     public static double[] solve(double[][] matrix, double[] bias) {
+        int iters = 0;
         double[] result = new double[matrix.length];
         double[] P = new double[matrix.length];
         double[] Q = new double[matrix.length];
@@ -25,12 +26,16 @@ public class B {
         for (int i = 1; i < matrix.length; ++i) {
             P[i] = - matrix[i][2] / (matrix[i][1] + matrix[i][0] * P[i - 1]);
             Q[i] = (bias[i] - matrix[i][0] * Q[i - 1]) / (matrix[i][1] + matrix[i][0] * P[i - 1]);
+            ++iters;
         }
 
         result[matrix.length - 1] = Q[matrix.length - 1];
         for (int i = matrix.length - 2; i >= 0; --i) {
             result[i] = P[i] * result[i + 1] + Q[i];
+            ++iters;
         }
+
+        System.out.println("Количество итераций: " + iters);
 
         return result;
     }

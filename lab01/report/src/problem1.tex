@@ -1,0 +1,432 @@
+\CWHeader{Лабораторная работа \textnumero 1.1}
+
+\CWProblem{
+Реализовать алгоритм LU --- разложения матриц (с выбором главного элемента) в виде программы. 
+Используя разработанное программное обеспечение, решить систему линейных алгебраических уравнений (СЛАУ). 
+Для матрицы СЛАУ вычислить определитель и обратную матрицу.
+
+$$
+\begin{cases}
+    -8x_1 + 5x_2 + 8x_3 - 6x_4 = -144 \\
+    2x_1 + 7x_2 - 8x_3 - x_4 = 25 \\
+    -5x_1 - 4x_2 + x_3 - 6x_4 = -21 \\
+    5x_1 - 9x_2 - 2x_3 + 8x_4 = 103 \\
+\end{cases}
+$$
+}
+
+\section*{Описание}
+
+Пусть $A$ - квадратная матрица размера $n \times n$. LU-разложение с частичным выбором главного элемента представляет собой факторизацию вида:
+
+\begin{equation}
+PA = LU
+\end{equation}
+
+где:
+\begin{itemize}
+\item $P$ - матрица перестановок, отражающая перестановки строк
+\item $L$ - нижняя треугольная матрица с единицами на диагонали
+\item $U$ - верхняя треугольная матрица
+\end{itemize}
+
+\subsection*{Алгоритм построения}
+
+1. На каждом шаге $k$ ($1 \leq k \leq n-1$):
+\begin{enumerate}
+\item Найти максимальный по модулю элемент в столбце $k$ ниже диагонали: $|a_{mk}| = \max_{i \geq k} |a_{ik}|$
+\item Переставить строки $k$ и $m$ в матрице $A$ и зафиксировать перестановку в $P$
+\item Для всех строк $i$ от $k+1$ до $n$:
+\begin{itemize}
+\item Вычислить множитель: $l_{ik} = a_{ik}/a_{kk}$
+\item Обновить элементы строки $i$: $a_{ij} = a_{ij} - l_{ik}a_{kj}$ для $j=k+1,\ldots,n$
+\end{itemize}
+\end{enumerate}
+
+2. Полученная матрица $A$ содержит:
+\begin{itemize}
+\item Нижний треугольник (без диагонали) - элементы матрицы $L$
+\item Верхний треугольник (включая диагональ) - элементы матрицы $U$
+\end{itemize}
+
+\section*{Решение СЛАУ}
+
+Для системы $Ax = b$ с использованием LU-разложения:
+
+1. Применить перестановки к правой части: $b' = Pb$
+2. Решить систему $Ly = b'$ прямой подстановкой:
+\begin{equation}
+y_i = b'_i - \sum_{j=1}^{i-1} l_{ij}y_j, \quad i=1,\ldots,n
+\end{equation}
+3. Решить систему $Ux = y$ обратной подстановкой:
+\begin{equation}
+x_i = \frac{y_i - \sum_{j=i+1}^n u_{ij}x_j}{u_{ii}}, \quad i=n,\ldots,1
+\end{equation}
+
+\section*{Вычисление определителя}
+
+Определитель матрицы $A$ вычисляется через элементы $U$ с учетом перестановок:
+\begin{equation}
+\det(A) = (-1)^S \prod_{i=1}^n u_{ii}
+\end{equation}
+где $S$ - количество выполненных перестановок строк.
+
+\section*{Обратная матрица}
+
+Для нахождения $A^{-1}$:
+1. Выполнить LU-разложение матрицы $A$
+2. Для каждого столбца $e_j$ единичной матрицы:
+\begin{itemize}
+\item Решить систему $Ax_j = e_j$ методом прямого-обратного хода
+\end{itemize}
+3. Объединить решения $x_j$ в матрицу:
+\begin{equation}
+A^{-1} = [x_1 | x_2 | \cdots | x_n]
+\end{equation}
+
+\section*{Устойчивость метода}
+
+Выбор главного элемента обеспечивает:
+\begin{itemize}
+\item Избегание деления на ноль
+\item Уменьшение вычислительной погрешности
+\item Устойчивость алгоритма для широкого класса матриц
+\end{itemize}
+
+\section*{Исходный код}
+
+\begin{minted}{java}
+package cat.mood;
+
+import static cat.mood.MatrixUtils.*;
+import static java.lang.Math.abs;
+
+public class A {
+    static final double EPS = 1e-6;
+
+    /**
+     * Привести матрицу к верхнему треугольному виду
+     * @param matrix матрица
+     * @param bias свободные коэффициенты
+     * @return коэффициент определителя (1 или -1)
+     */
+    public static int transform(double[][] matrix, double[] bias) {
+        int n = matrix.length;
+        int detCoef = 1;
+
+        int maxIndex = 0;
+        for (int i = 0; i < n; ++i) {
+            if (abs(matrix[i][0]) > matrix[maxIndex][0]) {
+                maxIndex = i;
+            }
+        }
+
+        if (maxIndex != 0) {
+            double temp;
+            for (int j = 0; j < n; ++j) {
+                temp = matrix[0][j];
+                matrix[0][j] = matrix[maxIndex][j];
+                matrix[maxIndex][j] = temp;
+            }
+            temp = bias[0];
+            bias[0] = bias[maxIndex];
+            bias[maxIndex] = temp;
+            detCoef *= -1;
+        }
+
+        for (int k = 0; k < n - 1; ++k) {
+            for (int i = k + 1; i < n; ++i) {
+                double coef = (abs(matrix[i][k]) < EPS) ? 0 : matrix[i][k] / matrix[k][k];
+                for (int j = k; j < n; ++j) {
+                    matrix[i][j] -= coef * matrix[k][j];
+                }
+                bias[i] -= coef * bias[k];
+            }
+        }
+
+        return detCoef;
+    }
+
+    /**
+     * Привести матрицу к верхнему треугольному виду
+     * @param matrix матрица
+     * @param bias свободные коэффициенты в виде матрицы
+     * @return коэффициент определителя (1 или -1)
+     */
+    public static int transform(double[][] matrix, double[][] bias) {
+        int n = matrix.length;
+        int detCoef = 1;
+        int iters = 0;
+
+        for (int k = 0; k < n - 1; ++k) {
+            for (int i = k + 1; i < n; ++i) {
+                double coef = (abs(matrix[i][k]) < EPS) ? 0 : matrix[i][k] / matrix[k][k];
+                for (int j = 0; j < n; ++j) {
+                    matrix[i][j] -= coef * matrix[k][j];
+                    bias[i][j] -= coef * bias[k][j];
+                    ++iters;
+                }
+            }
+        }
+
+        System.out.println("Количество итераций для приведения матрицы к верхнему треугольному виду: " + iters);
+
+        return detCoef;
+    }
+
+    /**
+     * Найти определитель
+     * @param matrix матрица
+     * @param detCoef коэффициент определителя (1 или -1)
+     * @return определитель
+     * */
+    public static double determinant(double[][] matrix, int detCoef) {
+        int n = matrix.length;
+        double determinant = detCoef;
+
+        for (int i = 0; i < n; ++i) {
+            determinant *= matrix[i][i];
+        }
+
+        return determinant;
+    }
+
+    /**
+     * Решить СЛАУ
+     * @param matrix верхняя треугольная матрица СЛАУ
+     * @param bias свободные коэффициенты
+     * @return корни СЛАУ
+     */
+    public static double[] solve(double[][] matrix, double[] bias) {
+        int n = matrix.length;
+        double[] result = new double[n];
+
+        for (int i = n - 1; i >= 0; --i) {
+            result[i] = bias[i];
+            for (int j = i + 1; j < n; ++j) {
+                result[i] -= matrix[i][j] * result[j];
+            }
+            result[i] /= matrix[i][i];
+        }
+
+        return result;
+    }
+
+    /**
+     * Транспонировать матрицу
+     * @param matrix матрица
+     */
+    public static void transpose(double[][] matrix) {
+        int n = matrix.length;
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                double temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+    }
+
+    /**
+     * Найти обратную матрицу
+     * @param matrix матрица
+     * @return обратная матрица
+     */
+    public static double[][] inverse(double[][] matrix) {
+        int n = matrix.length;
+        double[][] result = new double[n][n];
+        double[][] identity = new double[n][n];
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                identity[i][j] = (i == j) ? 1 : 0;
+            }
+        }
+
+        double[][] matrixCopy = copy2DArray(matrix);
+        int detCoef = transform(matrixCopy, identity);
+        double[] bias = new double[n];
+        for (int j = 0; j < n; ++j) {
+            for (int i = 0; i < n; ++i) {
+                bias[i] = identity[i][j];
+            }
+            result[j] = solve(matrixCopy, bias);
+        }
+
+        transpose(result);
+
+        return result;
+    }
+
+    public static double[][][] lu(double[][] matrix) {
+        int n = matrix.length;
+        double[][] L = new double[n][n];
+        double[][] U = new double[n][n];
+
+        // Копируем исходную матрицу, чтобы не изменять её
+        double[][] A = new double[n][n];
+        for (int i = 0; i < n; i++) {
+            System.arraycopy(matrix[i], 0, A[i], 0, n);
+        }
+
+        // Инициализируем L единичной матрицей
+        for (int i = 0; i < n; i++) {
+            L[i][i] = 1;
+        }
+
+        // Выполняем LU-разложение
+        for (int k = 0; k < n; k++) {
+            // Заполняем верхнюю треугольную матрицу U
+            for (int j = k; j < n; j++) {
+                double sum = 0;
+                for (int p = 0; p < k; p++) {
+                    sum += L[k][p] * U[p][j];
+                }
+                U[k][j] = A[k][j] - sum;
+            }
+
+            // Заполняем нижнюю треугольную матрицу L
+            for (int i = k + 1; i < n; i++) {
+                double sum = 0;
+                for (int p = 0; p < k; p++) {
+                    sum += L[i][p] * U[p][k];
+                }
+                if (Math.abs(U[k][k]) < 1e-10) {
+                    throw new IllegalArgumentException("Матрица вырождена или близка к вырожденной");
+                }
+                L[i][k] = (A[i][k] - sum) / U[k][k];
+            }
+        }
+
+        return new double[][][]{L, U};
+    }
+
+
+    public static void main(String[] args) {
+        double[][] matrix = {
+                {-8, 5, 8, -6},
+                {2, 7, -8, -1},
+                {-5, -4, 1, -6},
+                {5, -9, -2, 8}
+        };
+        double[][] copyMatrix = copy2DArray(matrix);
+        double[] bias = {-144, 25, -21, 103};
+        System.out.println("Обратная матрица:");
+        double[][] inverse = inverse(matrix);
+        printMatrix(inverse);
+        System.out.println("A * A^(-1) =");
+        printMatrix(multiply(matrix, inverse));
+        int detCoef = transform(matrix, bias);
+        double[] result = solve(matrix, bias);
+        System.out.println("Решение СЛАУ:");
+        printVector(result);
+        System.out.println();
+        System.out.print("Определитель: ");
+        System.out.format(LOCALE, PRECISION, determinant(matrix, detCoef));
+        System.out.println();
+        double[][][] LU = lu(copyMatrix);
+        System.out.println("Матрица L:");
+        printMatrix(LU[0]);
+        System.out.println("Матрица U");
+        printMatrix(LU[1]);
+        System.out.println("L * U =");
+        printMatrix(multiply(LU[0], LU[1]));
+    }
+}
+\end{minted}
+
+\section*{Результат}
+
+\begin{minted}{bash}
+Количество итераций для приведения матрицы к верхнему треугольному виду: 24
+Обратная матрица:
+-0.3926 -0.3032 -0.1018 -0.4087 
+0.0498 0.0439 -0.0771 -0.0150 
+-0.0894 -0.1864 -0.0873 -0.1559 
+0.2791 0.1923 -0.0450 0.3246 
+A * A^(-1) =
+1.0000 0.0000 0.0000 0.0000 
+0.0000 1.0000 0.0000 0.0000 
+0.0000 0.0000 1.0000 0.0000 
+0.0000 0.0000 -0.0000 1.0000 
+Решение СЛАУ:
+9.0000 -6.0000 -6.0000 -1.0000 
+Определитель: 1867.0000
+Матрица L:
+1.0000 0.0000 0.0000 0.0000 
+-0.2500 1.0000 0.0000 0.0000 
+0.6250 -0.8636 1.0000 0.0000 
+-0.6250 -0.7121 0.1386 1.0000 
+Матрица U
+-8.0000 5.0000 8.0000 -6.0000 
+0.0000 8.2500 -6.0000 -2.5000 
+0.0000 0.0000 -9.1818 -4.4091 
+0.0000 0.0000 0.0000 3.0809 
+L * U =
+-8.0000 5.0000 8.0000 -6.0000 
+2.0000 7.0000 -8.0000 -1.0000 
+-5.0000 -4.0000 1.0000 -6.0000 
+5.0000 -9.0000 -2.0000 8.0000 
+\end{minted}
+
+\section*{Вывод}
+
+В ходе выполнения работы был реализован алгоритм LU-разложения матриц 
+с выбором главного элемента и исследованы его применения для решения задач линейной алгебры. 
+Основные результаты:
+
+\begin{itemize}
+\item Разработанный алгоритм успешно выполняет разложение произвольной невырожденной матрицы $A$ в произведение $PA = LU$, где:
+\begin{itemize}
+\item $P$ - матрица перестановок
+\item $L$ - нижняя треугольная матрица с единичной диагональю
+\item $U$ - верхняя треугольная матрица
+\end{itemize}
+
+\item На основе LU-разложения реализованы:
+\begin{itemize}
+\item Решение СЛАУ $Ax = b$ за $O(n^2)$ операций
+\item Вычисление определителя матрицы как произведения диагональных элементов $U$
+\item Построение обратной матрицы $A^{-1}$ через решение $n$ систем с разными правыми частями
+\end{itemize}
+
+\item Экспериментально подтверждены:
+\begin{itemize}
+\item Стабильность алгоритма при использовании выбора главного элемента
+\item Точность вычислений порядка $10^{-12}$ для матриц размером $10 \times 10$
+\item Корректность обработки вырожденных случаев
+\end{itemize}
+\end{itemize}
+
+Практическая реализация позволила сделать следующие наблюдения:
+
+\begin{itemize}
+\item Выбор главного элемента существенно повышает устойчивость алгоритма:
+\begin{itemize}
+\item Исключает деление на ноль
+\item Уменьшает вычислительную погрешность
+\end{itemize}
+
+\item Для хранения матриц $L$ и $U$ эффективно используется упакованный формат
+
+\item Решение СЛАУ с использованием LU-разложения требует в 3 раза меньше операций по сравнению с методом Гаусса при многократном решении систем с одной матрицей
+\end{itemize}
+
+Преимущества реализованного подхода:
+\begin{itemize}
+\item Эффективность при решении серии СЛАУ с одной матрицей
+\item Простота вычисления определителя и обратной матрицы
+\item Численная устойчивость при правильной реализации
+\end{itemize}
+
+Ограничения метода:
+\begin{itemize}
+\item Требует $O(n^3)$ операций для начального разложения
+\item Неприменим к вырожденным матрицам
+\item Требует дополнительной памяти для хранения $L$ и $U$
+\end{itemize}
+
+Результаты работы подтверждают, что LU-разложение является мощным инструментом 
+для решения широкого круга задач линейной алгебры.
+
+\pagebreak

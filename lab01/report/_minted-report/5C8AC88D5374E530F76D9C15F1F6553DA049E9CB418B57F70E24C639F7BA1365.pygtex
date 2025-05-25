@@ -1,0 +1,31 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Количество\PYG{+w}{ }итераций\PYG{+w}{ }для\PYG{+w}{ }приведения\PYG{+w}{ }матрицы\PYG{+w}{ }к\PYG{+w}{ }верхнему\PYG{+w}{ }треугольному\PYG{+w}{ }виду:\PYG{+w}{ }\PYG{l+m}{24}
+Обратная\PYG{+w}{ }матрица:
+\PYGZhy{}0.3926\PYG{+w}{ }\PYGZhy{}0.3032\PYG{+w}{ }\PYGZhy{}0.1018\PYG{+w}{ }\PYGZhy{}0.4087
+\PYG{l+m}{0}.0498\PYG{+w}{ }\PYG{l+m}{0}.0439\PYG{+w}{ }\PYGZhy{}0.0771\PYG{+w}{ }\PYGZhy{}0.0150
+\PYGZhy{}0.0894\PYG{+w}{ }\PYGZhy{}0.1864\PYG{+w}{ }\PYGZhy{}0.0873\PYG{+w}{ }\PYGZhy{}0.1559
+\PYG{l+m}{0}.2791\PYG{+w}{ }\PYG{l+m}{0}.1923\PYG{+w}{ }\PYGZhy{}0.0450\PYG{+w}{ }\PYG{l+m}{0}.3246
+A\PYG{+w}{ }*\PYG{+w}{ }A\PYGZca{}\PYG{o}{(}\PYGZhy{}1\PYG{o}{)}\PYG{+w}{ }\PYG{o}{=}
+\PYG{l+m}{1}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000
+\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{1}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000
+\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{1}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000
+\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYGZhy{}0.0000\PYG{+w}{ }\PYG{l+m}{1}.0000
+Решение\PYG{+w}{ }СЛАУ:
+\PYG{l+m}{9}.0000\PYG{+w}{ }\PYGZhy{}6.0000\PYG{+w}{ }\PYGZhy{}6.0000\PYG{+w}{ }\PYGZhy{}1.0000
+Определитель:\PYG{+w}{ }\PYG{l+m}{1867}.0000
+Матрица\PYG{+w}{ }L:
+\PYG{l+m}{1}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000
+\PYGZhy{}0.2500\PYG{+w}{ }\PYG{l+m}{1}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000
+\PYG{l+m}{0}.6250\PYG{+w}{ }\PYGZhy{}0.8636\PYG{+w}{ }\PYG{l+m}{1}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000
+\PYGZhy{}0.6250\PYG{+w}{ }\PYGZhy{}0.7121\PYG{+w}{ }\PYG{l+m}{0}.1386\PYG{+w}{ }\PYG{l+m}{1}.0000
+Матрица\PYG{+w}{ }U
+\PYGZhy{}8.0000\PYG{+w}{ }\PYG{l+m}{5}.0000\PYG{+w}{ }\PYG{l+m}{8}.0000\PYG{+w}{ }\PYGZhy{}6.0000
+\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{8}.2500\PYG{+w}{ }\PYGZhy{}6.0000\PYG{+w}{ }\PYGZhy{}2.5000
+\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYGZhy{}9.1818\PYG{+w}{ }\PYGZhy{}4.4091
+\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{3}.0809
+L\PYG{+w}{ }*\PYG{+w}{ }\PYG{n+nv}{U}\PYG{+w}{ }\PYG{o}{=}
+\PYGZhy{}8.0000\PYG{+w}{ }\PYG{l+m}{5}.0000\PYG{+w}{ }\PYG{l+m}{8}.0000\PYG{+w}{ }\PYGZhy{}6.0000
+\PYG{l+m}{2}.0000\PYG{+w}{ }\PYG{l+m}{7}.0000\PYG{+w}{ }\PYGZhy{}8.0000\PYG{+w}{ }\PYGZhy{}1.0000
+\PYGZhy{}5.0000\PYG{+w}{ }\PYGZhy{}4.0000\PYG{+w}{ }\PYG{l+m}{1}.0000\PYG{+w}{ }\PYGZhy{}6.0000
+\PYG{l+m}{5}.0000\PYG{+w}{ }\PYGZhy{}9.0000\PYG{+w}{ }\PYGZhy{}2.0000\PYG{+w}{ }\PYG{l+m}{8}.0000
+\end{Verbatim}

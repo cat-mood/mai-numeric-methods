@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Матрица\PYG{+w}{ }Q:
+\PYG{l+m}{0},0000\PYG{+w}{	}\PYG{l+m}{0},1802\PYG{+w}{	}\PYGZhy{}0,9836\PYG{+w}{	}
+\PYG{l+m}{0},1240\PYG{+w}{	}\PYGZhy{}0,9760\PYG{+w}{	}\PYGZhy{}0,1788\PYG{+w}{	}
+\PYG{l+m}{0},9923\PYG{+w}{	}\PYG{l+m}{0},1220\PYG{+w}{	}\PYG{l+m}{0},0224\PYG{+w}{	}
+
+Матрица\PYG{+w}{ }R:
+\PYGZhy{}8,0623\PYG{+w}{	}\PYG{l+m}{4},7133\PYG{+w}{	}\PYG{l+m}{1},6125\PYG{+w}{	}
+\PYG{l+m}{0},0000\PYG{+w}{	}\PYGZhy{}5,5484\PYG{+w}{	}\PYG{l+m}{3},7128\PYG{+w}{	}
+\PYGZhy{}0,0000\PYG{+w}{	}\PYG{l+m}{0},0000\PYG{+w}{	}\PYGZhy{}2,3696\PYG{+w}{	}
+
+Проверка\PYG{+w}{ }QR\PYG{+w}{ }\PYG{o}{(}Q\PYG{+w}{ }*\PYG{+w}{ }R\PYG{o}{)}:
+\PYGZhy{}0,0000\PYG{+w}{	}\PYGZhy{}1,0000\PYG{+w}{	}\PYG{l+m}{3},0000\PYG{+w}{	}
+\PYGZhy{}1,0000\PYG{+w}{	}\PYG{l+m}{6},0000\PYG{+w}{	}\PYGZhy{}3,0000\PYG{+w}{	}
+\PYGZhy{}8,0000\PYG{+w}{	}\PYG{l+m}{4},0000\PYG{+w}{	}\PYG{l+m}{2},0000\PYG{+w}{	}
+
+Собственные\PYG{+w}{ }значения:
+\PYG{l+m}{2},3115+52,0904i
+\PYG{l+m}{2},3115\PYGZhy{}52,0904i
+\PYG{l+m}{3},3771
+\end{Verbatim}

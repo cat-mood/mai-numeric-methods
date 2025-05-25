@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Метод\PYG{+w}{ }итераций:
+Количество\PYG{+w}{ }итераций\PYG{+w}{ }в\PYG{+w}{ }методе\PYG{+w}{ }итераций:\PYG{+w}{ }\PYG{l+m}{88}
+\PYG{l+m}{9}.0000\PYG{+w}{ }\PYG{l+m}{5}.0000\PYG{+w}{ }\PYG{l+m}{3}.0000\PYG{+w}{ }\PYG{l+m}{4}.0000
+Результат\PYG{+w}{ }проверки:\PYG{+w}{ }\PYG{n+nb}{true}
+Метод\PYG{+w}{ }Зейделя:
+Количество\PYG{+w}{ }итераций\PYG{+w}{ }Зейдель:\PYG{+w}{ }\PYG{l+m}{31}
+\PYG{l+m}{9}.0000\PYG{+w}{ }\PYG{l+m}{5}.0000\PYG{+w}{ }\PYG{l+m}{3}.0000\PYG{+w}{ }\PYG{l+m}{4}.0000
+Результат\PYG{+w}{ }проверки:\PYG{+w}{ }\PYG{n+nb}{true}
+\end{Verbatim}

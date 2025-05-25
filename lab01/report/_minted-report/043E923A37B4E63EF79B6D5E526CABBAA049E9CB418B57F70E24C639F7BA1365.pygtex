@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Количество\PYG{+w}{ }итераций:\PYG{+w}{ }\PYG{l+m}{7}
+Диагональная\PYG{+w}{ }матрица:
+\PYGZhy{}13.1414\PYG{+w}{ }\PYGZhy{}0.0000\PYG{+w}{ }\PYG{l+m}{0}.0000
+\PYGZhy{}0.0000\PYG{+w}{ }\PYG{l+m}{14}.7574\PYG{+w}{ }\PYG{l+m}{0}.0000
+\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{0}.0000\PYG{+w}{ }\PYG{l+m}{7}.3840
+Матрица\PYG{+w}{ }собственных\PYG{+w}{ }векторов:
+\PYG{l+m}{0}.9032\PYG{+w}{ }\PYG{l+m}{0}.4293\PYG{+w}{ }\PYG{l+m}{0}.0055
+\PYGZhy{}0.3563\PYG{+w}{ }\PYG{l+m}{0}.7567\PYG{+w}{ }\PYGZhy{}0.5482
+\PYGZhy{}0.2395\PYG{+w}{ }\PYG{l+m}{0}.4931\PYG{+w}{ }\PYG{l+m}{0}.8363
+Проверка\PYG{+w}{ }на\PYG{+w}{ }ортогональность:
+\PYG{o}{(}x0,\PYG{+w}{ }x1\PYG{o}{)}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}.7755575615628914E\PYGZhy{}17
+\PYG{o}{(}x0,\PYG{+w}{ }x2\PYG{o}{)}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}.7755575615628914E\PYGZhy{}17
+\PYG{o}{(}x1,\PYG{+w}{ }x2\PYG{o}{)}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYGZhy{}5.551115123125783E\PYGZhy{}17
+\end{Verbatim}

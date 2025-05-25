@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Количество\PYG{+w}{ }итераций:\PYG{+w}{ }\PYG{l+m}{8}
+Результат:
+\PYG{l+m}{1}.0000\PYG{+w}{ }\PYGZhy{}6.0000\PYG{+w}{ }\PYGZhy{}6.0000\PYG{+w}{ }\PYGZhy{}6.0000\PYG{+w}{ }\PYGZhy{}9.0000
+Проверка:\PYG{+w}{ }\PYG{n+nb}{true}
+\end{Verbatim}

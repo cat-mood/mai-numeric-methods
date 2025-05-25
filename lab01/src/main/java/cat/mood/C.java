@@ -40,6 +40,7 @@ public class C {
      * @return вектор корней
      */
     public static double[] iteration(double[][] matrix, double[] bias, double eps) {
+        int iters = 0;
         Transformation t = transform(matrix, bias);
 
         double[] result = Arrays.copyOf(t.beta(), t.beta().length);
@@ -51,8 +52,10 @@ public class C {
             epsilon = coef * lc(subtraction(newResult, result));
 
             result = newResult;
+            ++iters;
         }
 
+        System.out.println("Количество итераций в методе итераций: " + iters);
         return result;
     }
 
@@ -64,6 +67,7 @@ public class C {
      * @return вектор корней
      */
     public static double[] seidel(double[][] matrix, double[] bias, double eps) {
+        int iters = 0;
         Transformation t = transform(matrix, bias);
         double[] result = Arrays.copyOf(t.beta(), t.beta().length);
         double coef = lc(t.alpha()) / (1 - lc(t.alpha()));
@@ -80,11 +84,13 @@ public class C {
                     }
                 }
             }
+            ++iters;
 
             epsilon = coef * lc(subtraction(newResult, result));
             result = newResult;
         }
 
+        System.out.println("Количество итераций Зейдель: " + iters);
         return result;
     }
 

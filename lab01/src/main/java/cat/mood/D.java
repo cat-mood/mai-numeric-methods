@@ -91,12 +91,6 @@ public class D {
                 {6, 1, 8}
         };
 
-//        double[][] matrix = {
-//                {4, 2, 1},
-//                {2, 5, 3},
-//                {1, 3, 6}
-//        };
-
         var result = jacobiRotation(matrix, 0.000001);
         System.out.println("Диагональная матрица:");
         printMatrix(result.first);

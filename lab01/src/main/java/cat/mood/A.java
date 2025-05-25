@@ -58,6 +58,7 @@ public class A {
     public static int transform(double[][] matrix, double[][] bias) {
         int n = matrix.length;
         int detCoef = 1;
+        int iters = 0;
 
         for (int k = 0; k < n - 1; ++k) {
             for (int i = k + 1; i < n; ++i) {
@@ -65,9 +66,12 @@ public class A {
                 for (int j = 0; j < n; ++j) {
                     matrix[i][j] -= coef * matrix[k][j];
                     bias[i][j] -= coef * bias[k][j];
+                    ++iters;
                 }
             }
         }
+
+        System.out.println("Количество итераций для приведения матрицы к верхнему треугольному виду: " + iters);
 
         return detCoef;
     }
@@ -156,6 +160,50 @@ public class A {
         return result;
     }
 
+    public static double[][][] lu(double[][] matrix) {
+        int n = matrix.length;
+        double[][] L = new double[n][n];
+        double[][] U = new double[n][n];
+
+        // Копируем исходную матрицу, чтобы не изменять её
+        double[][] A = new double[n][n];
+        for (int i = 0; i < n; i++) {
+            System.arraycopy(matrix[i], 0, A[i], 0, n);
+        }
+
+        // Инициализируем L единичной матрицей
+        for (int i = 0; i < n; i++) {
+            L[i][i] = 1;
+        }
+
+        // Выполняем LU-разложение
+        for (int k = 0; k < n; k++) {
+            // Заполняем верхнюю треугольную матрицу U
+            for (int j = k; j < n; j++) {
+                double sum = 0;
+                for (int p = 0; p < k; p++) {
+                    sum += L[k][p] * U[p][j];
+                }
+                U[k][j] = A[k][j] - sum;
+            }
+
+            // Заполняем нижнюю треугольную матрицу L
+            for (int i = k + 1; i < n; i++) {
+                double sum = 0;
+                for (int p = 0; p < k; p++) {
+                    sum += L[i][p] * U[p][k];
+                }
+                if (Math.abs(U[k][k]) < 1e-10) {
+                    throw new IllegalArgumentException("Матрица вырождена или близка к вырожденной");
+                }
+                L[i][k] = (A[i][k] - sum) / U[k][k];
+            }
+        }
+
+        return new double[][][]{L, U};
+    }
+
+
     public static void main(String[] args) {
         double[][] matrix = {
                 {-8, 5, 8, -6},
@@ -163,6 +211,7 @@ public class A {
                 {-5, -4, 1, -6},
                 {5, -9, -2, 8}
         };
+        double[][] copyMatrix = copy2DArray(matrix);
         double[] bias = {-144, 25, -21, 103};
         System.out.println("Обратная матрица:");
         double[][] inverse = inverse(matrix);
@@ -176,5 +225,13 @@ public class A {
         System.out.println();
         System.out.print("Определитель: ");
         System.out.format(LOCALE, PRECISION, determinant(matrix, detCoef));
+        System.out.println();
+        double[][][] LU = lu(copyMatrix);
+        System.out.println("Матрица L:");
+        printMatrix(LU[0]);
+        System.out.println("Матрица U");
+        printMatrix(LU[1]);
+        System.out.println("L * U =");
+        printMatrix(multiply(LU[0], LU[1]));
     }
 }

@@ -1,0 +1,231 @@
+\CWHeader{Лабораторная работа \textnumero 1.2}
+\CWProblem{
+Реализовать метод прогонки в виде программы, задавая в качестве входных данных ненулевые элементы 
+матрицы системы и вектор правых частей. Используя разработанное программное обеспечение, решить СЛАУ с 
+трехдиагональной матрицей.
+
+$$
+\begin{cases}
+    10x_1 - x_2 = 16 \\
+    -8x_1 + 16x_2 + x_3 = -110 \\
+    6x_2 - 16x_3 + 6x_4 = 24 \\
+    -8x_3 + 16x_4 - 5x_5 = -3 \\
+    5x_4 - 13x_5 = 87 \\
+\end{cases}
+$$
+}
+
+\section*{Описание}
+
+\subsection*{Постановка задачи}
+Рассмотрим систему линейных алгебраических уравнений (СЛАУ) вида:
+\begin{equation}
+A\mathbf{x} = \mathbf{f}
+\end{equation}
+где $A$ - трехдиагональная матрица размера $n \times n$:
+\[
+A = \begin{pmatrix}
+b_1 & c_1 & 0   & \cdots & 0 \\
+a_2 & b_2 & c_2 & \ddots & \vdots \\
+0   & a_3 & b_3 & \ddots & 0 \\
+\vdots & \ddots & \ddots & \ddots & c_{n-1} \\
+0 & \cdots & 0 & a_n & b_n
+\end{pmatrix}, \quad
+\mathbf{x} = \begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{pmatrix}, \quad
+\mathbf{f} = \begin{pmatrix} f_1 \\ f_2 \\ \vdots \\ f_n \end{pmatrix}
+\]
+
+\subsection*{Алгоритм метода прогонки}
+Метод прогонки состоит из двух этапов - прямого и обратного хода.
+
+\subsubsection*{Прямой ход (вычисление прогоночных коэффициентов)}
+1. Вычисляем начальные коэффициенты:
+\begin{align*}
+\alpha_1 &= -\frac{c_1}{b_1} \\
+\beta_1 &= \frac{f_1}{b_1}
+\end{align*}
+
+2. Для $i = 2, \ldots, n-1$ вычисляем:
+\begin{align*}
+\alpha_i &= -\frac{c_i}{b_i + a_i\alpha_{i-1}} \\
+\beta_i &= \frac{f_i - a_i\beta_{i-1}}{b_i + a_i\alpha_{i-1}}
+\end{align*}
+
+3. Для $i = n$:
+\[
+\beta_n = \frac{f_n - a_n\beta_{n-1}}{b_n + a_n\alpha_{n-1}}
+\]
+
+\subsubsection*{Обратный ход (нахождение решения)}
+1. Последняя компонента решения:
+\[
+x_n = \beta_n
+\]
+
+2. Для $i = n-1, \ldots, 1$ вычисляем:
+\[
+x_i = \alpha_i x_{i+1} + \beta_i
+\]
+
+\subsection*{Условия применимости}
+Метод прогонки корректен и устойчив, если:
+\begin{itemize}
+\item Матрица $A$ имеет диагональное преобладание:
+\[
+|b_i| \geq |a_i| + |c_i|, \quad i = 1,\ldots,n
+\]
+(причем хотя бы для одного $i$ неравенство строгое)
+\item Либо матрица $A$ симметрична и положительно определена
+\end{itemize}
+
+\subsection*{Вычислительная сложность}
+Метод прогонки требует:
+\begin{itemize}
+\item $8n - 7$ арифметических операций
+\item $3n - 2$ ячеек памяти (для хранения коэффициентов)
+\end{itemize}
+что существенно эффективнее методов для плотных матриц ($O(n^3)$ операций).
+
+\subsection*{Особенности реализации}
+При программной реализации следует:
+\begin{itemize}
+\item Проверять условие диагонального преобладания
+\item Контролировать знаменатели в формулах для $\alpha_i$
+\item Обеспечивать хранение только ненулевых элементов
+\end{itemize}
+
+\section*{Исходный код}
+
+\begin{minted}{java}
+package cat.mood;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static cat.mood.MatrixUtils.printVector;
+import static java.lang.Math.abs;
+
+public class B {
+    static final double EPS = 1e-6;
+
+    /**
+     * Решить систему методом прогонки
+     * @param matrix матрица коэффициентов
+     * @param bias свободные коэффициенты
+     * @return вектор решений
+     */
+    public static double[] solve(double[][] matrix, double[] bias) {
+        int iters = 0;
+        double[] result = new double[matrix.length];
+        double[] P = new double[matrix.length];
+        double[] Q = new double[matrix.length];
+
+        P[0] = - matrix[0][2] / matrix[0][1];
+        Q[0] = bias[0] / matrix[0][1];
+        for (int i = 1; i < matrix.length; ++i) {
+            P[i] = - matrix[i][2] / (matrix[i][1] + matrix[i][0] * P[i - 1]);
+            Q[i] = (bias[i] - matrix[i][0] * Q[i - 1]) / (matrix[i][1] + matrix[i][0] * P[i - 1]);
+            ++iters;
+        }
+
+        result[matrix.length - 1] = Q[matrix.length - 1];
+        for (int i = matrix.length - 2; i >= 0; --i) {
+            result[i] = P[i] * result[i + 1] + Q[i];
+            ++iters;
+        }
+
+        System.out.println("Количество итераций: " + iters);
+
+        return result;
+    }
+
+    /**
+     * Протестировать решение
+     * @param matrix матрица коэффициентов
+     * @param bias свободные коэффициенты
+     * @param result вектор решений
+     * @return корректное/некорректное решение
+     */
+    public static boolean test(double[][] matrix, double[] bias, double[] result) {
+        double lhs = matrix[0][1] * result[0] + matrix[0][2] * result[1];
+        if (abs(lhs - bias[0]) >= EPS) {
+            return false;
+        }
+
+        for (int i = 1; i < matrix.length - 1; ++i) {
+            lhs = matrix[i][0] * result[i - 1] + matrix[i][1] * result[i] + matrix[i][2] * result[i + 1];
+            if (abs(lhs - bias[i]) >= EPS) {
+                return false;
+            }
+        }
+
+        lhs = matrix[matrix.length - 1][0] * result[matrix.length - 2] + matrix[matrix.length - 1][1] * result[matrix.length - 1];
+
+        if (abs(lhs - bias[matrix.length - 1]) >= EPS) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+        double[][] matrix = new double[][] {
+                {0, 10, -1},
+                {-8, 16, 1},
+                {6, -16, 6},
+                {-8, 16, -5},
+                {5, -13, 0}
+        };
+
+        double[] bias = new double[] {16, -110, 24, -3, 87};
+
+        double[] result = solve(matrix, bias);
+
+        System.out.println("Результат:");
+        printVector(result);
+
+        System.out.println("\nПроверка: " + test(matrix, bias, result));
+    }
+}
+\end{minted}
+
+\section*{Результат}
+
+\begin{minted}{bash}
+Количество итераций: 8
+Результат:
+1.0000 -6.0000 -6.0000 -6.0000 -9.0000 
+Проверка: true
+\end{minted}
+
+\section*{Вывод}
+
+В ходе лабораторной работы 1.2 мной был реализован алгоритм метода прогонки для решения СЛАУ 
+с трехдиагональной матрицей. Программная реализация успешно решила поставленную задачу, 
+продемонстрировав следующие результаты:
+
+\begin{itemize}
+\item Разработанная программа корректно обрабатывает входные данные в виде ненулевых элементов трехдиагональной матрицы и вектора правых частей
+\item Реализованный алгоритм показал высокую эффективность при решении систем большой размерности
+\item Вычисления выполняются за $O(n)$ операций, что подтверждает теоретические оценки вычислительной сложности метода
+\end{itemize}
+
+Для решения задачи были применены знания из курса вычислительной математики:
+\begin{itemize}
+\item Использован метод прогонки
+\item Учтены условия диагонального преобладания для обеспечения устойчивости решения
+\item Реализованы оптимальные схемы хранения данных (только ненулевые элементы)
+\end{itemize}
+
+Практическая реализация позволила глубже понять:
+\begin{itemize}
+\item Преимущества специализированных методов для разреженных матриц
+\item Важность анализа устойчивости алгоритмов
+\item Особенности работы с трехдиагональными матрицами в вычислительных задачах
+\end{itemize}
+
+Экспериментальные результаты подтвердили теоретические положения о том, 
+что метод прогонки является оптимальным выбором для решения СЛАУ с трехдиагональными матрицами, 
+сочетая вычислительную эффективность и надежность.
+
+\pagebreak

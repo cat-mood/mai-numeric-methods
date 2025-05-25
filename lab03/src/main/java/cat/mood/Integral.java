@@ -74,10 +74,6 @@ public class Integral {
 
     // Метод Симпсона
     public static double simpsonMethod(Function<Double, Double> f, double a, double b, double h) {
-        if ((b - a) / h % 2 != 0) {
-            throw new IllegalArgumentException("Для метода Симпсона (b-a)/h должно быть четным числом");
-        }
-
         double sum = f.apply(a) + f.apply(b);
         double x = a + h;
         boolean even = false;
@@ -89,7 +85,7 @@ public class Integral {
         return sum * h / 3;
     }
 
-    // Уточнение значения интеграла методом Рунге-Ромберга
+    // Уточнение значения интеграла методом Рунге-Ромберга-Ричардсона
     public static double rungeRombergRefined(double Ih, double Ih2, double h, double h2, int p) {
         return Ih2 + (Ih2 - Ih) / (Math.pow(h / h2, p) - 1);
     }
