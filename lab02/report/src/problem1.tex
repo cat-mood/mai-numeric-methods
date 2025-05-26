@@ -1,0 +1,202 @@
+\CWHeader{Лабораторная работа \textnumero 2.1}
+
+\CWProblem{
+Реализовать методы простой итерации и Ньютона решения нелинейных уравнений в виде программ, 
+задавая в качестве входных данных точность вычислений. С использованием разработанного программного обеспечения найти 
+положительный корень нелинейного уравнения (начальное приближение определить графически). Проанализировать зависимость погрешности 
+вычислений от количества итераций. 
+
+$$
+x^4 - 2x - 1= 0
+$$
+}
+
+\section*{Описание}
+
+Для решения нелинейных уравнений вида $f(x) = 0$ рассмотрим два основных итерационных метода.
+
+\textbf{Метод простой итерации} требует преобразования исходного уравнения к виду:
+\begin{equation}
+x = \varphi(x)
+\end{equation}
+с последующим итерационным процессом:
+\begin{equation}
+x_{k+1} = \varphi(x_k), \quad k = 0,1,2,\ldots
+\end{equation}
+
+Условия сходимости метода:
+\begin{itemize}
+\item Функция $\varphi(x)$ должна отображать отрезок $[a,b]$ в себя
+\item Существует $q < 1$ такое, что $|\varphi'(x)| \leq q$ для всех $x \in [a,b]$
+\end{itemize}
+
+Оценка погрешности на $k$-й итерации:
+\begin{equation}
+|x^* - x_k| \leq \frac{q^k}{1-q}|x_1 - x_0|
+\end{equation}
+
+\textbf{Метод Ньютона} реализуется по формуле:
+\begin{equation}
+x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}, \quad k = 0,1,2,\ldots
+\end{equation}
+
+Достаточные условия сходимости:
+\begin{itemize}
+\item $f(x) \in C^2[a,b]$
+\item $f(a)f(b) < 0$
+\item $f'(x)$ и $f''(x)$ сохраняют знак на $[a,b]$
+\item Начальное приближение $x_0$ удовлетворяет $f(x_0)f''(x_0) > 0$
+\end{itemize}
+
+Метод Ньютона обладает квадратичной скоростью сходимости при выполнении условий.
+
+Для практической реализации важны критерии остановки:
+\begin{equation}
+|x_{k+1} - x_k| < \varepsilon \quad \text{или} \quad |f(x_k)| < \varepsilon
+\end{equation}
+
+Начальное приближение $x_0$ определяется графически из анализа поведения функции $f(x)$ на интересующем интервале.
+
+Анализ зависимости погрешности от числа итераций показывает:
+\begin{itemize}
+\item Для метода простой итерации: $\ln\varepsilon \sim k$
+\item Для метода Ньютона: $\ln\ln\varepsilon \sim k$
+\end{itemize}
+
+Выбор между методами зависит от конкретной задачи и требований к точности вычислений.
+
+\section*{Исходный код}
+
+\begin{minted}{java}
+package cat.mood;
+
+import java.util.function.Function;
+
+public class A {
+    public static double derivative(Function<Double, Double> f, double x, double eps) {
+        double dy = f.apply(x + eps) - f.apply(x);
+        return dy / eps;
+    }
+
+    public static double secondDerivative(Function<Double, Double> f, double x, double eps) {
+        double fPlus = f.apply(x + eps);
+        double fMinus = f.apply(x - eps);
+        double fCenter = f.apply(x);
+
+        return (fPlus - 2 * fCenter + fMinus) / (eps * eps);
+    }
+
+    public static boolean checkFunction(Function<Double, Double> phi, double eps, double a, double b) {
+        double x = a;
+        while (x < b) {
+            double y = phi.apply(x);
+            if (y < a || y > b) {
+                return false;
+            }
+            if (Math.abs(derivative(phi, x, eps)) >= 1) {
+                return false;
+            }
+            x += eps;
+        }
+
+        return true;
+    }
+
+    public static double iteration(Function<Double, Double> phi, double eps, double a, double b) {
+        boolean check = checkFunction(phi, eps, a, b);
+        if (!check) {
+            throw new RuntimeException("Не выполнено условие сходимости");
+        }
+
+        double prev = a;
+        double cur = phi.apply(prev);
+        int iters = 1;
+        while (Math.abs(cur - prev) > eps) {
+            prev = cur;
+            cur = phi.apply(prev);
+            ++iters;
+        }
+
+        System.out.println("Количество итераций: " + iters);
+
+        return cur;
+    }
+
+    public static double newton(Function<Double, Double> f, double eps, double a, double b) {
+        if (f.apply(a) * f.apply(b) >= 0) {
+            throw new RuntimeException("Не выполнено условие сходимости");
+        }
+
+        double prev = b;
+        while (prev > a) {
+            if (f.apply(prev) * secondDerivative(f, prev, eps) > 0) {
+                break;
+            }
+            prev -= eps;
+        }
+        if (f.apply(prev) * secondDerivative(f, prev, eps) <= 0) {
+            throw new RuntimeException("Не выполнено условие сходимости");
+        }
+        int iters = 1;
+        double cur = prev - f.apply(prev) / derivative(f, prev, eps);
+        while (Math.abs(cur - prev) > eps) {
+            prev = cur;
+            cur = prev - f.apply(prev) / derivative(f, prev, eps);
+            ++iters;
+        }
+
+        System.out.println("Количество итераций: " + iters);
+
+        return cur;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Метод простой итерации:");
+        System.out.println(iteration(x -> (Math.pow(2 * x + 1, 0.25)), 0.000001, 0, 2));
+        System.out.println("Метод Ньютона:");
+        System.out.println(newton(x -> (Math.pow(x, 4) - 2 * x - 1), 0.000001, 0, 2));
+    }
+}
+\end{minted}
+
+\section*{Результат}
+
+\begin{minted}{bash}
+Метод простой итерации:
+Количество итераций: 10
+1.3953368880468564
+Метод Ньютона:
+Количество итераций: 6
+1.3953369944670735
+\end{minted}
+
+\section*{Вывод}
+
+В ходе выполнения работы были успешно реализованы и протестированы два численных метода решения нелинейных уравнений: 
+метод простой итерации и метод Ньютона. Проведенные вычисления позволили сделать следующие выводы:
+
+\textbf{Сходимость методов}:
+\begin{itemize}
+\item Метод Ньютона продемонстрировал более быструю сходимость (6 итераций) по сравнению с методом простой итерации (10 итераций)
+\item Оба метода сошлись к близким значениям корня: 1.395336888 (простая итерация) и 1.395336994 (метод Ньютона)
+\end{itemize}
+
+\textbf{Точность результатов}:
+Различие между полученными значениями составляет около $1.06 \times 10^{-7}$, что свидетельствует о хорошей точности обоих методов
+
+\textbf{Эффективность методов}:
+\begin{itemize}
+\item Метод Ньютона оказался более эффективным по количеству требуемых итераций
+\item Метод простой итерации, хотя и потребовал больше вычислений, проще в реализации и не требует вычисления производной
+\end{itemize}
+
+\textbf{Практические рекомендации}:
+\begin{itemize}
+\item Для задач с вычислительно сложными производными целесообразно использовать метод простой итерации
+\item Когда доступно аналитическое выражение производной и важна скорость сходимости, предпочтительнее метод Ньютона
+\end{itemize}
+
+Результаты работы подтвердили теоретические положения о скорости сходимости рассматриваемых методов и продемонстрировали 
+их практическую применимость для решения нелинейных уравнений.
+
+\pagebreak

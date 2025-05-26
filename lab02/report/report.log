@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.11.21)  26 MAY 2025 20:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.11.21)  26 MAY 2025 21:12
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -863,13 +863,12 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.49 \item Р
-            ’РµСЂС…РЅРёР№ С‚СЂРµСѓРіРѕР»СЊРЅРёРє (РІРєР»СЋС‡Р°СЏ РґРёР°РіРѕР...
-[1] [2]
+l.52 
+      [1]
 \openout3 = `report.pyg'.
 
  (./_minted-report/default.pygstyle)
-(./_minted-report/53F2D62AC0CF171927407B4B35CA72ECB4BA785BE0F3152757FE2B67A7B1F
+(./_minted-report/9E0B8E1D09A66E8477D6430F97BAF53DB4BA785BE0F3152757FE2B67A7B1F
 467.pygtex
 LaTeX Font Info:    Trying to load font information for T2B+cmtt on input line 
 1.
@@ -879,93 +878,39 @@ File: t2bcmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 LaTeX Font Info:    Font shape `T2B/cmtt/bx/n' in size <12> not available
 (Font)              Font shape `T2B/cmtt/m/n' tried instead on input line 2.
 
-[3] [4] [5] [6] [7] [8])
+[2] [3])
 \openout3 = `report.pyg'.
 
 
-(./_minted-report/5C8AC88D5374E530F76D9C15F1F6553DA049E9CB418B57F70E24C639F7BA1
-365.pygtex) [9] [10]) [11] (./src/problem2.tex [12] [13]
+(./_minted-report/41DBB5C1E687FCAB1DB8FB14E3BB174AA049E9CB418B57F70E24C639F7BA1
+365.pygtex [4])) [5] (./src/problem2.tex [6] [7]
 \openout3 = `report.pyg'.
 
 
-(./_minted-report/80280B0D14C5D5AA484732219C32B0DCB4BA785BE0F3152757FE2B67A7B1F
-467.pygtex [14] [15])
+(./_minted-report/9264F2C2520881F78C13C5CA30FA0714B4BA785BE0F3152757FE2B67A7B1F
+467.pygtex [8] [9] [10] [11] [12] [13])
 \openout3 = `report.pyg'.
 
 
-(./_minted-report/5B46BFE4201BD4EAB5DD9FE7CC99FB31A049E9CB418B57F70E24C639F7BA1
-365.pygtex)
-Overfull \hbox (2.57268pt too wide) in paragraph at lines 208--209
-[]\T2B/cmr/m/n/12 Разработанная про-грам-ма кор-рект-но об-ра-ба-ты-ва-ет вход-
-ные дан-ные в ви-де нену-
- []
-
-[16]) [17] (./src/problem3.tex
-Overfull \hbox (2.7101pt too wide) in paragraph at lines 16--16
-\T2B/cmr/m/n/12 вы-чис-ле-ний. Ис-поль-зуя раз-ра-бо-тан-ное про-грамм-ное обес
--пе-че-ние, ре-шить СЛАУ. Про-
- []
-
-[18] [19]
-\openout3 = `report.pyg'.
-
-
-(./_minted-report/30C6E90BE0E853100EAB384CE3368638B4BA785BE0F3152757FE2B67A7B1F
-467.pygtex [20] [21] [22] [23])
-\openout3 = `report.pyg'.
-
-
-(./_minted-report/8BEA0111FD802CAD77BFD9B82A59D5AFA049E9CB418B57F70E24C639F7BA1
-365.pygtex) [24]) [25] (./src/problem4.tex [26] [27]
-\openout3 = `report.pyg'.
-
-
-(./_minted-report/F810B0A317757475D2FDFE52A343C231B4BA785BE0F3152757FE2B67A7B1F
-467.pygtex [28] [29] [30])
-\openout3 = `report.pyg'.
-
-
-(./_minted-report/043E923A37B4E63EF79B6D5E526CABBAA049E9CB418B57F70E24C639F7BA1
-365.pygtex [31])
-Overfull \hbox (1.59158pt too wide) in paragraph at lines 276--277
-[]\T2B/cmr/m/n/12 Критически важ-ным ока-зал-ся пра-виль-ный вы-бор об-ну-ля-е-
-мо-го эле-мен-та на каж-
- []
-
-[32]) [33] (./src/problem5.tex [34] [35]
-\openout3 = `report.pyg'.
-
-
-(./_minted-report/3842FF7D475735CACFDE4658DFADFE87B4BA785BE0F3152757FE2B67A7B1F
-467.pygtex [36] [37] [38] [39] [40] [41] [42] [43])
-\openout3 = `report.pyg'.
-
-
-(./_minted-report/29A2716E0EDCC10B6F371965EA1D16B5A049E9CB418B57F70E24C639F7BA1
-365.pygtex) [44]
-Overfull \hbox (5.17462pt too wide) in paragraph at lines 476--477
-[]\T2B/cmr/m/n/12 Преобразование Ха-ус-хол-де-ра до-ка-за-ло свою эф-фек-тив-но
-сть для QR-разложений 
- []
-
-) [45] (./report.aux)
+(./_minted-report/AE048445DEFBE81FEDF88BDC423A7FCDA049E9CB418B57F70E24C639F7BA1
+365.pygtex) [14]) [15] (./report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: E7956B5C0F2E57F8F493FADF20DB01DB;383.
+(rerunfilecheck)             Checksum: 6D98655268C2A52690646AD2E518AE54;184.
 runsystem(rm report.pyg)...executed.
 
  ) 
 Here is how much of TeX's memory you used:
- 18102 strings out of 475656
- 301196 string characters out of 5787140
- 1938975 words of memory out of 5000000
- 39646 multiletter control sequences out of 15000+600000
- 569128 words of font info for 66 fonts, out of 8000000 for 9000
+ 17931 strings out of 475656
+ 295935 string characters out of 5787140
+ 1935975 words of memory out of 5000000
+ 39604 multiletter control sequences out of 15000+600000
+ 570622 words of font info for 68 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
- 92i,12n,95p,818b,890s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 92i,12n,95p,641b,890s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b/lbit1200.60
 0pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b/lbtt1200.
 600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1
@@ -976,16 +921,18 @@ bbx1200.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b
 2b/lbbx1728.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex1
 0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on report.pdf (46 pages, 295774 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/symbols/msbm10.pfb>
+Output written on report.pdf (16 pages, 232796 bytes).
 PDF statistics:
- 841 PDF objects out of 1000 (max. 8388607)
- 349 compressed objects within 4 object streams
- 152 named destinations out of 1000 (max. 500000)
+ 566 PDF objects out of 1000 (max. 8388607)
+ 163 compressed objects within 2 object streams
+ 48 named destinations out of 1000 (max. 500000)
  9 words of extra memory for PDF output out of 10000 (max. 10000000)
 

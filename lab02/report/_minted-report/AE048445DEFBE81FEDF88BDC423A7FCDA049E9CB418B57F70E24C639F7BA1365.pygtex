@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Сходимость\PYG{+w}{ }достигнута\PYG{+w}{ }за\PYG{+w}{ }\PYG{l+m}{11}\PYG{+w}{ }итераций.
+Метод\PYG{+w}{ }итераций:
+Решение\PYG{+w}{ }найдено:
+\PYG{n+nv}{x0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1},275762
+\PYG{n+nv}{x1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2},059607
+Сходимость\PYG{+w}{ }за\PYG{+w}{ }\PYG{l+m}{4}\PYG{+w}{ }итераций.
+Метод\PYG{+w}{ }Ньютона:
+Решение\PYG{+w}{ }найдено:
+\PYG{n+nv}{x0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1},275762
+\PYG{n+nv}{x1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2},059607
+\end{Verbatim}
