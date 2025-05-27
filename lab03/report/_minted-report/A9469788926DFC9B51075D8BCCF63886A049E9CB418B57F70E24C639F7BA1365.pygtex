@@ -1,0 +1,26 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+а\PYG{o}{)}
+Многочлен\PYG{+w}{ }Лагранжа:
++5.009363247330172\PYG{o}{(}x\PYG{+w}{ }+\PYG{+w}{ }\PYGZhy{}0.1\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.2\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.5\PYG{o}{)}\PYG{+w}{ }\PYGZhy{}3.70680409558444\PYG{o}{(}x\PYG{+w}{ }+\PYG{+w}{ }\PYGZhy{}0.4\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.2\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.5\PYG{o}{)}\PYG{+w}{ }\PYGZhy{}7.4325540887098285\PYG{o}{(}x\PYG{+w}{ }+\PYG{+w}{ }\PYGZhy{}0.4\PYG{o}{)(}x\PYG{+w}{ }+\PYG{+w}{ }\PYGZhy{}0.1\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.5\PYG{o}{)}\PYG{+w}{ }+6.3185109604833265\PYG{o}{(}x\PYG{+w}{ }+\PYG{+w}{ }\PYGZhy{}0.4\PYG{o}{)(}x\PYG{+w}{ }+\PYG{+w}{ }\PYGZhy{}0.1\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.2\PYG{o}{)}
+Многочлен\PYG{+w}{ }Лангранжа\PYG{+w}{ }в\PYG{+w}{ }точке\PYG{+w}{ }\PYG{n+nv}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}.1:\PYG{+w}{ }\PYG{l+m}{0}.2000558780105125
+Функция\PYG{+w}{ }в\PYG{+w}{ }точке\PYG{+w}{ }\PYG{n+nv}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}.1:\PYG{+w}{ }\PYG{l+m}{0}.2001674211615598
+Погрешность:\PYG{+w}{ }\PYG{l+m}{1}.1154315104730528E\PYGZhy{}4
+
+Многочлен\PYG{+w}{ }Ньютона:
+\PYGZhy{}0.8115168460674881\PYG{+w}{ }+\PYG{+w}{ }\PYG{l+m}{2}.037831416353094\PYG{o}{(}x\PYG{+w}{ }+\PYG{+w}{ }\PYG{l+m}{0}.4\PYG{o}{)}\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.05457823863354249\PYG{o}{(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.4\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.1\PYG{o}{)}\PYG{+w}{ }+\PYG{+w}{ }\PYG{l+m}{0}.18851602351922966\PYG{o}{(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.4\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.1\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.2\PYG{o}{)}
+Многочлен\PYG{+w}{ }Ньютона\PYG{+w}{ }в\PYG{+w}{ }точке\PYG{+w}{ }\PYG{n+nv}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}.1:\PYG{+w}{ }\PYG{l+m}{0}.20005587801051233
+Функция\PYG{+w}{ }в\PYG{+w}{ }точке\PYG{+w}{ }\PYG{n+nv}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}.1:\PYG{+w}{ }\PYG{l+m}{0}.2001674211615598
+Погрешность:\PYG{+w}{ }\PYG{l+m}{1}.1154315104747181E\PYGZhy{}4
+б\PYG{o}{)}
+Многочлен\PYG{+w}{ }Лагранжа:
++3.757022435497629\PYG{o}{(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.0\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.2\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.5\PYG{o}{)}\PYG{+w}{ }\PYG{l+m}{0}.0\PYG{o}{(}x\PYG{+w}{ }+\PYG{+w}{ }\PYGZhy{}0.4\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.2\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.5\PYG{o}{)}\PYG{+w}{ }\PYGZhy{}11.148831133064744\PYG{o}{(}x\PYG{+w}{ }+\PYG{+w}{ }\PYGZhy{}0.4\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.0\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.5\PYG{o}{)}\PYG{+w}{ }+7.582213152579992\PYG{o}{(}x\PYG{+w}{ }+\PYG{+w}{ }\PYGZhy{}0.4\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.0\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.2\PYG{o}{)}
+Многочлен\PYG{+w}{ }Лангранжа\PYG{+w}{ }в\PYG{+w}{ }точке\PYG{+w}{ }\PYG{n+nv}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}.1:\PYG{+w}{ }\PYG{l+m}{0}.20009364664038548
+Функция\PYG{+w}{ }в\PYG{+w}{ }точке\PYG{+w}{ }\PYG{n+nv}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}.1:\PYG{+w}{ }\PYG{l+m}{0}.2001674211615598
+Погрешность:\PYG{+w}{ }\PYG{l+m}{7}.377452117432459E\PYGZhy{}5
+
+Многочлен\PYG{+w}{ }Ньютона:
+\PYGZhy{}0.8115168460674881\PYG{+w}{ }+\PYG{+w}{ }\PYG{l+m}{2}.02879211516872\PYG{o}{(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.4\PYG{o}{)}\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.03667085202844348\PYG{o}{(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.4\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.0\PYG{o}{)}\PYG{+w}{ }+\PYG{+w}{ }\PYG{l+m}{0}.19040445501287723\PYG{o}{(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.4\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.0\PYG{o}{)(}x\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }\PYG{l+m}{0}.2\PYG{o}{)}
+Многочлен\PYG{+w}{ }Ньютона\PYG{+w}{ }в\PYG{+w}{ }точке\PYG{+w}{ }\PYG{n+nv}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}.1:\PYG{+w}{ }\PYG{l+m}{0}.20009364664038537
+Функция\PYG{+w}{ }в\PYG{+w}{ }точке\PYG{+w}{ }\PYG{n+nv}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}.1:\PYG{+w}{ }\PYG{l+m}{0}.2001674211615598
+Погрешность:\PYG{+w}{ }\PYG{l+m}{7}.377452117443561E\PYGZhy{}5
+\end{Verbatim}

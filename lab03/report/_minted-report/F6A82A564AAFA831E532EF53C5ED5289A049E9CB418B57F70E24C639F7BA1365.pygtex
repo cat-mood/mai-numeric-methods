@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Первая\PYG{+w}{ }производная\PYG{+w}{ }\PYG{o}{(}левосторонняя,\PYG{+w}{ }\PYG{l+m}{1}\PYGZhy{}й\PYG{+w}{ }порядок\PYG{o}{)}:\PYG{+w}{ }\PYG{l+m}{1}.7854
+Первая\PYG{+w}{ }производная\PYG{+w}{ }\PYG{o}{(}правосторонняя,\PYG{+w}{ }\PYG{l+m}{1}\PYGZhy{}й\PYG{+w}{ }порядок\PYG{o}{)}:\PYG{+w}{ }\PYG{l+m}{1}.3216999999999999
+Первая\PYG{+w}{ }производная\PYG{+w}{ }\PYG{o}{(}\PYG{l+m}{2}\PYGZhy{}й\PYG{+w}{ }порядок\PYG{+w}{ }точности\PYG{o}{)}:\PYG{+w}{ }\PYG{l+m}{1}.55355
+Вторая\PYG{+w}{ }производная\PYG{+w}{ }\PYG{o}{(}\PYG{l+m}{2}\PYGZhy{}й\PYG{+w}{ }порядок\PYG{+w}{ }точности\PYG{o}{)}:\PYG{+w}{ }\PYGZhy{}0.4637000000000002
+\end{Verbatim}

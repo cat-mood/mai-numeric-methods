@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Метод\PYG{+w}{ }прямоугольников:
+\PYG{n+nv}{h}\PYG{o}{=}\PYG{l+m}{1},000:\PYG{+w}{ }\PYG{n+nv}{F}\PYG{o}{=}\PYG{l+m}{0},04048897
+\PYG{n+nv}{h}\PYG{o}{=}\PYG{l+m}{0},500:\PYG{+w}{ }\PYG{n+nv}{F}\PYG{o}{=}\PYG{l+m}{0},04186829
+Уточнённое\PYG{+w}{ }значение:\PYG{+w}{ }\PYG{l+m}{0},04232806
+Погрешность:\PYG{+w}{ }\PYG{l+m}{0},00045977
+
+Метод\PYG{+w}{ }трапеций:
+\PYG{n+nv}{h}\PYG{o}{=}\PYG{l+m}{1},000:\PYG{+w}{ }\PYG{n+nv}{F}\PYG{o}{=}\PYG{l+m}{0},04639504
+\PYG{n+nv}{h}\PYG{o}{=}\PYG{l+m}{0},500:\PYG{+w}{ }\PYG{n+nv}{F}\PYG{o}{=}\PYG{l+m}{0},04344201
+Уточнённое\PYG{+w}{ }значение:\PYG{+w}{ }\PYG{l+m}{0},04245766
+Погрешность:\PYG{+w}{ }\PYG{l+m}{0},00098435
+
+Метод\PYG{+w}{ }Симпсона:
+\PYG{n+nv}{h}\PYG{o}{=}\PYG{l+m}{1},000:\PYG{+w}{ }\PYG{n+nv}{F}\PYG{o}{=}\PYG{l+m}{0},04302782
+\PYG{n+nv}{h}\PYG{o}{=}\PYG{l+m}{0},500:\PYG{+w}{ }\PYG{n+nv}{F}\PYG{o}{=}\PYG{l+m}{0},04245766
+Уточнённое\PYG{+w}{ }значение:\PYG{+w}{ }\PYG{l+m}{0},04241965
+Погрешность:\PYG{+w}{ }\PYG{l+m}{0},00003801
+\end{Verbatim}

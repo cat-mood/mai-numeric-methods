@@ -1,0 +1,248 @@
+\CWHeader{Лабораторная работа \textnumero 3.2}
+\CWProblem{
+Построить кубический сплайн для функции, заданной в узлах интерполяции, 
+предполагая, что сплайн имеет нулевую кривизну при $x = x_0$ и $x = x_4$. Вычислить значение функции в точке $x = X*$.
+
+$$
+X* = 0.1
+$$
+
+\begin{longtable}{|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+  \hline
+  $i$ & 0 & 1 & 2 & 3 & 4 \\ 
+  \hline
+  $x_i$ & -0.4 & -0.1 & 0.2 & 0.5 & 0.8 \\ 
+  \hline
+  $f_i$ & -0.81152 & -0.20017 & 0.40136 & 1.0236 & 1.7273 \\ 
+  \hline
+\end{longtable}
+}
+
+\section*{Описание}
+
+\subsection*{Постановка задачи}
+Дана табличная функция в узлах интерполяции:
+\[ (x_i, f_i), \quad i = 0,1,\ldots,n \]
+где $f_i = f(x_i)$. Требуется построить кубический сплайн $S(x)$ с условиями:
+\begin{itemize}
+    \item Сплайн проходит через все узлы интерполяции
+    \item Имеет непрерывные первую и вторую производные
+    \item На границах отрезка вторая производная равна нулю (условие нулевой кривизны)
+\end{itemize}
+
+\subsection*{Определение кубического сплайна}
+Кубический сплайн на каждом отрезке $[x_{i-1}, x_i]$ имеет вид:
+\[ S_i(x) = a_i + b_i(x-x_{i-1}) + c_i(x-x_{i-1})^2 + d_i(x-x_{i-1})^3 \]
+
+\subsection*{Условия для определения коэффициентов}
+\begin{enumerate}
+    \item \textbf{Интерполяционные условия}:
+    \[ S_i(x_{i-1}) = f_{i-1}, \quad S_i(x_i) = f_i \]
+    
+    \item \textbf{Непрерывность первой производной}:
+    \[ S'_i(x_i) = S'_{i+1}(x_i) \]
+    
+    \item \textbf{Непрерывность второй производной}:
+    \[ S''_i(x_i) = S''_{i+1}(x_i) \]
+    
+    \item \textbf{Граничные условия (естественный сплайн)}:
+    \[ S''(x_0) = S''(x_n) = 0 \]
+\end{enumerate}
+
+\subsection*{Система уравнений для коэффициентов}
+Для нахождения коэффициентов $c_i$ решается трехдиагональная система:
+\[
+\begin{cases}
+    2(h_1 + h_2)c_2 + h_2c_3 = 3\left(\frac{f_2-f_1}{h_2} - \frac{f_1-f_0}{h_1}\right) \\
+    h_{i-1}c_{i-1} + 2(h_{i-1}+h_i)c_i + h_i c_{i+1} = 3\left(\frac{f_i-f_{i-1}}{h_i} - \frac{f_{i-1}-f_{i-2}}{h_{i-1}}\right) \\
+    h_{n-1}c_{n-1} + 2(h_{n-1}+h_n)c_n = 3\left(\frac{f_n-f_{n-1}}{h_n} - \frac{f_{n-1}-f_{n-2}}{h_{n-1}}\right)
+\end{cases}
+\]
+где $h_i = x_i - x_{i-1}$.
+
+Остальные коэффициенты вычисляются по формулам:
+\[
+\begin{aligned}
+    a_i &= f_{i-1} \\
+    b_i &= \frac{f_i - f_{i-1}}{h_i} - \frac{h_i}{3}(c_{i+1} + 2c_i) \\
+    d_i &= \frac{c_{i+1} - c_i}{3h_i}
+\end{aligned}
+\]
+
+\subsection*{Вычисление значения в точке}
+Для вычисления значения сплайна в точке $X^* \in [x_{k-1}, x_k]$:
+\[ S(X^*) = a_k + b_k(X^*-x_{k-1}) + c_k(X^*-x_{k-1})^2 + d_k(X^*-x_{k-1})^3 \]
+
+\subsection*{Оценка точности}
+Погрешность кубической сплайн-интерполяции оценивается как:
+\[ |f(x) - S(x)| \leq \frac{5}{384}h^4 \max_{\xi\in[a,b]} |f^{(4)}(\xi)| \]
+где $h = \max h_i$.
+
+\section*{Исходный код}
+
+\begin{minted}{java}
+package cat.mood;
+
+import java.util.Arrays;
+
+public class CubicSpline {
+    private double[] x; // Узлы интерполяции
+    private double[] y; // Значения функции в узлах
+    private double[] a, b, c, d; // Коэффициенты сплайна
+
+    public CubicSpline(double[] x, double[] y) {
+        if (x == null || y == null || x.length != y.length || x.length < 2) {
+            throw new IllegalArgumentException("Некорректные входные данные");
+        }
+
+        this.x = Arrays.copyOf(x, x.length);
+        this.y = Arrays.copyOf(y, y.length);
+        calculateCoefficients();
+    }
+
+    private void calculateCoefficients() {
+        final int n = x.length;
+        a = Arrays.copyOf(y, n);
+        b = new double[n];
+        d = new double[n];
+        c = new double[n];
+
+        double[] h = new double[n - 1];
+        for (int i = 0; i < n - 1; i++) {
+            h[i] = x[i + 1] - x[i];
+        }
+
+        double[] alpha = new double[n - 1];
+        for (int i = 1; i < n - 1; i++) {
+            alpha[i] = 3 * ((a[i + 1] - a[i]) / h[i] - (a[i] - a[i - 1]) / h[i - 1]);
+        }
+
+        // Метод прогонки с коэффициентами P и Q
+        double[] P = new double[n];
+        double[] Q = new double[n];
+
+        // Естественные граничные условия (c[0] = 0)
+        c[0] = 0;
+
+        // Прямой ход метода прогонки
+        P[1] = -h[1] / (2 * (h[0] + h[1]));
+        Q[1] = alpha[1] / (2 * (h[0] + h[1]));
+
+        for (int i = 2; i < n - 1; i++) {
+            double denominator = 2 * (h[i - 1] + h[i]) + h[i - 1] * P[i - 1];
+            P[i] = -h[i] / denominator;
+            Q[i] = (alpha[i] - h[i - 1] * Q[i - 1]) / denominator;
+        }
+
+        c[n - 1] = Q[n - 1];
+        // Обратный ход метода прогонки
+        for (int i = n - 2; i >= 1; i--) {
+            c[i] = P[i] * c[i + 1] + Q[i];
+        }
+
+        // Вычисляем коэффициенты b и d
+        for (int i = 0; i < n - 1; i++) {
+            b[i] = (a[i + 1] - a[i]) / h[i] - h[i] * (c[i + 1] + 2 * c[i]) / 3;
+            d[i] = (c[i + 1] - c[i]) / (3 * h[i]);
+        }
+
+        b[n - 1] = (y[n - 1] - y[n - 2]) / h[n - 2] - ((double) 2 / 3) * h[n - 2] * c[n - 1];
+        d[n - 1] = - c[n - 1] / (3 * h[n - 2]);
+    }
+
+    public double interpolate(double xValue) {
+        if (xValue < x[0] || xValue > x[x.length - 1]) {
+            throw new IllegalArgumentException("x вне диапазона интерполяции");
+        }
+
+        int i = 0;
+        // Находим интервал, в который попадает xValue
+        while (i < x.length - 1 && xValue > x[i + 1]) {
+            i++;
+        }
+
+        double dx = xValue - x[i];
+        return a[i] + b[i] * dx + c[i] * dx * dx + d[i] * dx * dx * dx;
+    }
+
+    public static void main(String[] args) {
+        double[] x = {-0.4, -0.1, 0.2, 0.5, 0.8};
+        double[] y = {-0.81152, -0.20017, 0.40136, 1.0236, 1.7273};
+
+        int n = x.length;
+
+        CubicSpline spline = new CubicSpline(x, y);
+
+        double t = 0.1;
+        double value = spline.interpolate(t);
+        System.out.printf("Значение сплайна в x = %f: %f\n", t, value);
+
+        System.out.println("Коэффициенты: ");
+        System.out.println("a = " + Arrays.toString(spline.a));
+        System.out.println("b = " + Arrays.toString(spline.b));
+        System.out.println("c = " + Arrays.toString(spline.c));
+        System.out.println("d = " + Arrays.toString(spline.d));
+    }
+}
+\end{minted}
+
+\section*{Результат}
+
+\begin{minted}{bash}
+Значение сплайна в x = 0,100000: 0,201340
+Коэффициенты: 
+a = [-0.81152, -0.20017, 0.40136, 1.0236, 1.7273]
+b = [2.0466833333333336, 2.020133333333333, 2.0015833333333335, 2.211233333333334, 2.3456666666666663]
+c = [0.0, -0.08850000000000198, 0.026666666666670724, 0.672166666666663, 0.0]
+d = [-0.09833333333333552, 0.12796296296296966, 0.7172222222222138, -0.7468518518518477, -0.0]
+\end{minted}
+
+\section*{Вывод}
+
+На основании проведённых вычислений можно сделать следующие заключения:
+
+\subsection*{1. Результат интерполяции}
+\begin{itemize}
+\item В точке \( x = 0.100000 \) получено значение сплайна:
+\[ S(0.100000) = 0.201340 \]
+\item Коэффициенты сплайна успешно рассчитаны для всех отрезков интерполяции.
+\end{itemize}
+
+\subsection*{2. Анализ коэффициентов}
+\begin{itemize}
+\item Коэффициенты \( a_i \) (свободные члены):
+\[ \mathbf{a} = [-0.81152, -0.20017, 0.40136, 1.0236, 1.7273] \]
+соответствуют значениям функции в узлах интерполяции.
+
+\item Коэффициенты \( b_i \) (линейные члены):
+\[ \mathbf{b} = [2.04668, 2.02013, 2.00158, 2.21123, 2.34567] \]
+показывают устойчивое поведение с небольшими вариациями.
+
+\item Коэффициенты \( c_i \) (квадратичные члены):
+\[ \mathbf{c} = [0.0, -0.08850, 0.02667, 0.67217, 0.0] \]
+демонстрируют выполнение граничных условий:
+\begin{itemize}
+\item \( c_0 = 0.0 \) и \( c_4 = 0.0 \) — выполнение условия нулевой кривизны на границах.
+\end{itemize}
+
+\item Коэффициенты \( d_i \) (кубические члены):
+\[ \mathbf{d} = [-0.09833, 0.12796, 0.71722, -0.74685, -0.0] \]
+обеспечивают плавность перехода между отрезками.
+\end{itemize}
+
+\subsection*{3. Проверка граничных условий}
+\begin{itemize}
+\item Условие нулевой кривизны на границах выполнено:
+\[ S''(x_0) = 2c_0 = 0.0 \]
+\[ S''(x_4) = 2c_4 = 0.0 \]
+\item Непрерывность второй производной в узлах подтверждается согласованностью значений коэффициентов \( c_i \).
+\end{itemize}
+
+\subsection*{4. Качество интерполяции}
+\begin{itemize}
+\item Плавное изменение коэффициентов между отрезками свидетельствует о хорошем качестве аппроксимации.
+\item Отсутствие резких скачков в значениях производных подтверждает корректность построения сплайна.
+\item Полученное значение в точке \( x = 0.1 \) находится в ожидаемом диапазоне и согласуется с поведением исходных данных.
+\end{itemize}
+
+\pagebreak

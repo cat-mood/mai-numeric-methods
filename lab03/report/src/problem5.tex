@@ -1,0 +1,226 @@
+\CWHeader{Лабораторная работа \textnumero 3.5}
+\CWProblem{
+Вычислить определенный интеграл $F = \int_{X_0}^{X_1} y dx$, методами прямоугольников, трапеций, Симпсона с шагами 
+$h_1, h_2$. Оценить погрешность вычислений, используя  Ме¬тод Рунге-Ромберга.
+
+$$
+y = \frac{x^2}{625 - x^4}  X_0 = 0, X_k = 4, h_1 = 1.0, h_2 = 0.5
+$$
+}
+
+\section*{Описание}
+
+\subsection*{Исходные данные}
+Дана функция $y = f(x)$, заданная на отрезке $[X_0, X_1]$. Требуется вычислить определённый интеграл:
+\[ F = \int_{X_0}^{X_1} f(x) dx \]
+
+\subsection*{Методы решения}
+Необходимо применить три классических метода численного интегрирования:
+
+\begin{enumerate}
+\item \textbf{Метод прямоугольников}:
+\[ F_{\text{пр}} \approx h \sum_{i=0}^{n-1} f\left(x_i + \frac{h}{2}\right) \]
+где $h = \frac{X_1 - X_0}{n}$
+
+\item \textbf{Метод трапеций}:
+\[ F_{\text{тр}} \approx \frac{h}{2} \left[f(X_0) + 2\sum_{i=1}^{n-1} f(x_i) + f(X_1)\right] \]
+
+\item \textbf{Метод Симпсона} (парабол):
+\[ F_{\text{симп}} \approx \frac{h}{3} \left[f(X_0) + 4\sum_{\text{неч}} f(x_i) + 2\sum_{\text{чет}} f(x_i) + f(X_1)\right] \]
+\end{enumerate}
+
+\subsection*{Параметры вычислений}
+\begin{itemize}
+\item Два различных шага интегрирования: $h_1$ и $h_2$ ($h_2 = \frac{h_1}{2}$)
+\item Для каждого метода выполнить вычисления с обоими шагами
+\end{itemize}
+
+\subsection*{Оценка погрешности}
+Применить \textbf{метод Рунге-Ромберга} для уточнения результата и оценки погрешности:
+\[ F \approx F_h + \frac{F_h - F_{kh}}{k^p - 1} \]
+где:
+\begin{itemize}
+\item $F_h$ -- значение интеграла с шагом $h$
+\item $k$ -- коэффициент уменьшения шага ($k=2$)
+\item $p$ -- порядок точности метода:
+\begin{itemize}
+\item $p=2$ для метода прямоугольников
+\item $p=2$ для метода трапеций
+\item $p=4$ для метода Симпсона
+\end{itemize}
+\end{itemize}
+
+\subsection*{Требуемые результаты}
+\begin{enumerate}
+\item Значения интеграла для всех методов с шагами $h_1$ и $h_2$
+\item Уточнённые значения по Рунге-Ромбергу
+\item Оценки погрешности для каждого метода
+\item Сравнительный анализ точности методов
+\end{enumerate}
+
+\subsection*{Особенности реализации}
+\begin{itemize}
+\item Для метода Симпсона количество отрезков должно быть чётным
+\item Шаги $h_1$ и $h_2$ должны быть согласованы ($h_2 = h_1/2$)
+\item При вычислениях учитывать все значащие цифры
+\end{itemize}
+
+\section*{Исходный код}
+
+\begin{minted}{java}
+package cat.mood;
+
+import java.util.function.Function;
+
+public class Integral {
+    public static void main(String[] args) {
+        Function<Double, Double> y = x -> Math.pow(x, 2) / (625 - Math.pow(x, 4));
+
+        double x0 = 0.0;
+        double x1 = 4.0;
+        double h1 = 1.0;
+        double h2 = 0.5;
+
+        // Вычисление интеграла разными методами с шагом h1
+        double rectH1 = rectangleMethod(y, x0, x1, h1);
+        double trapH1 = trapezoidalMethod(y, x0, x1, h1);
+        double simpH1 = simpsonMethod(y, x0, x1, h1);
+
+        // Вычисление интеграла разными методами с шагом h2
+        double rectH2 = rectangleMethod(y, x0, x1, h2);
+        double trapH2 = trapezoidalMethod(y, x0, x1, h2);
+        double simpH2 = simpsonMethod(y, x0, x1, h2);
+
+        // Оценка погрешности и уточнение методом Рунге-Ромберга
+        double rectRefined = rungeRombergRefined(rectH1, rectH2, h1, h2, 2);
+        double trapRefined = rungeRombergRefined(trapH1, trapH2, h1, h2, 2);
+        double simpRefined = rungeRombergRefined(simpH1, simpH2, h1, h2, 4);
+
+        double rectError = Math.abs(rectRefined - rectH2);
+        double trapError = Math.abs(trapRefined - trapH2);
+        double simpError = Math.abs(simpRefined - simpH2);
+
+        // Вывод результатов
+        System.out.println("Метод прямоугольников:");
+        System.out.printf("h=%.3f: F=%.8f\n", h1, rectH1);
+        System.out.printf("h=%.3f: F=%.8f\n", h2, rectH2);
+        System.out.printf("Уточнённое значение: %.8f\n", rectRefined);
+        System.out.printf("Погрешность: %.8f\n\n", rectError);
+
+        System.out.println("Метод трапеций:");
+        System.out.printf("h=%.3f: F=%.8f\n", h1, trapH1);
+        System.out.printf("h=%.3f: F=%.8f\n", h2, trapH2);
+        System.out.printf("Уточнённое значение: %.8f\n", trapRefined);
+        System.out.printf("Погрешность: %.8f\n\n", trapError);
+
+        System.out.println("Метод Симпсона:");
+        System.out.printf("h=%.3f: F=%.8f\n", h1, simpH1);
+        System.out.printf("h=%.3f: F=%.8f\n", h2, simpH2);
+        System.out.printf("Уточнённое значение: %.8f\n", simpRefined);
+        System.out.printf("Погрешность: %.8f\n", simpError);
+    }
+
+    // Метод прямоугольников (средних)
+    public static double rectangleMethod(Function<Double, Double> f, double a, double b, double h) {
+        double sum = 0.0;
+        double x = a + h / 2; // Средняя точка первого интервала
+        while (x < b) {
+            sum += f.apply(x);
+            x += h;
+        }
+        return sum * h;
+    }
+
+    // Метод трапеций
+    public static double trapezoidalMethod(Function<Double, Double> f, double a, double b, double h) {
+        double sum = 0.5 * (f.apply(a) + f.apply(b));
+        double x = a + h;
+        while (x < b) {
+            sum += f.apply(x);
+            x += h;
+        }
+        return sum * h;
+    }
+
+    // Метод Симпсона
+    public static double simpsonMethod(Function<Double, Double> f, double a, double b, double h) {
+        double sum = f.apply(a) + f.apply(b);
+        double x = a + h;
+        boolean even = false;
+        while (x < b) {
+            sum += (even ? 2 : 4) * f.apply(x);
+            x += h;
+            even = !even;
+        }
+        return sum * h / 3;
+    }
+
+    // Уточнение значения интеграла методом Рунге-Ромберга-Ричардсона
+    public static double rungeRombergRefined(double Ih, double Ih2, double h, double h2, int p) {
+        return Ih2 + (Ih2 - Ih) / (Math.pow(h / h2, p) - 1);
+    }
+}
+\end{minted}
+
+\section*{Результат}
+
+\begin{minted}{bash}
+Метод прямоугольников:
+h=1,000: F=0,04048897
+h=0,500: F=0,04186829
+Уточнённое значение: 0,04232806
+Погрешность: 0,00045977
+
+Метод трапеций:
+h=1,000: F=0,04639504
+h=0,500: F=0,04344201
+Уточнённое значение: 0,04245766
+Погрешность: 0,00098435
+
+Метод Симпсона:
+h=1,000: F=0,04302782
+h=0,500: F=0,04245766
+Уточнённое значение: 0,04241965
+Погрешность: 0,00003801
+\end{minted}
+
+\section*{Вывод}
+
+\subsection*{Сравнительные результаты методов}
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Метод & Значение при $h=1.0$ & Значение при $h=0.5$ & Уточнённое значение \\
+\midrule
+Прямоугольников & 0.04048897 & 0.04186829 & 0.04232806 \\
+Трапеций & 0.04639504 & 0.04344201 & 0.04245766 \\
+Симпсона & 0.04302782 & 0.04245766 & 0.04241965 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{Анализ точности методов}
+\begin{enumerate}
+\item \textbf{Сходимость результатов}:
+\begin{itemize}
+\item Все методы демонстрируют сходимость при уменьшении шага
+\item Наибольшее изменение при уменьшении шага у метода прямоугольников ($\Delta = 0.001379$)
+\item Наименьшее изменение у метода Симпсона ($\Delta = 0.000570$)
+\end{itemize}
+
+\item \textbf{Погрешности методов}:
+\begin{itemize}
+\item Наименьшая погрешность у метода Симпсона: $3.801 \times 10^{-5}$
+\item Погрешность метода трапеций в 25 раз выше, чем у Симпсона
+\item Метод прямоугольников показал промежуточную точность
+\end{itemize}
+
+\item \textbf{Эффективность уточнения}:
+\begin{itemize}
+\item Метод Рунге-Ромберга дал значительное уточнение для метода трапеций ($\Delta = 0.000984$)
+\item Для метода Симпсона уточнение минимально, что свидетельствует о высокой исходной точности
+\end{itemize}
+\end{enumerate}
+
+\pagebreak

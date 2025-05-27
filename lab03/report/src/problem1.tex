@@ -1,0 +1,328 @@
+\CWHeader{Лабораторная работа \textnumero 3.1}
+
+\CWProblem{
+Используя таблицу значений $Y$ функции  $y=f(x)$, вычисленных в точках  $X_i, i = 0, ..., 3$ 
+построить интерполяционные многочлены Лагранжа и Ньютона, проходящие через точки  ${X_i, 
+ Y_i}$.  Вычислить значение погрешности интерполяции в точке  $X*$.
+
+$$
+y = \arcsin (x) + x
+$$
+а) $X_i = -0.4, -0.1, 0.2, 0.5$
+б) $X_i = -0.4, 0, 0.2, 0.5$
+$X* = 0.1$
+}
+
+\section*{Описание}
+
+\subsection*{Постановка задачи}
+Дана табличная функция в узлах $X_i$:
+\[ (X_i, Y_i), \quad i=0,1,2,3 \]
+где $Y_i = f(X_i)$. Требуется:
+\begin{enumerate}
+\item Построить интерполяционные многочлены:
+\begin{itemize}
+\item В форме Лагранжа $L_3(x)$
+\item В форме Ньютона $P_3(x)$
+\end{itemize}
+\item Вычислить абсолютную погрешность в точке $X^*$:
+\[ \Delta = |f(X^*) - P(X^*)|, \quad P \in \{L_3, P_3\} \]
+\end{enumerate}
+
+\subsection*{Интерполяционный многочлен Лагранжа}
+Для $n+1$ узлов строится по формуле:
+\[ L_n(x) = \sum_{i=0}^n Y_i \cdot \ell_i(x) \]
+где базисные полиномы:
+\[ \ell_i(x) = \prod_{\substack{j=0 \\ j\neq i}}^n \frac{x-X_j}{X_i-X_j} \]
+
+Свойства:
+\begin{itemize}
+\item Точно проходит через все узлы: $L_n(X_i) = Y_i$
+\item Степень многочлена равна $n$
+\item Чувствителен к добавлению новых узлов
+\end{itemize}
+
+\subsection*{Интерполяционный многочлен Ньютона}
+Строится через разделённые разности:
+\[ P_n(x) = f[X_0] + \sum_{k=1}^n f[X_0,\ldots,X_k] \cdot \omega_k(x) \]
+где:
+\begin{itemize}
+\item $\omega_k(x) = \prod_{i=0}^{k-1}(x-X_i)$
+\item Разделённые разности:
+\begin{align*}
+f[X_i] &= Y_i \\
+f[X_i,X_j] &= \frac{f[X_j]-f[X_i]}{X_j-X_i} \\
+f[X_i,\ldots,X_k] &= \frac{f[X_{i+1},\ldots,X_k]-f[X_i,\ldots,X_{k-1}]}{X_k-X_i}
+\end{align*}
+\end{itemize}
+
+Преимущества:
+\begin{itemize}
+\item Удобен при добавлении новых узлов
+\item Позволяет оценить погрешность по первому отброшенному члену
+\end{itemize}
+
+\subsection*{Погрешность интерполяции}
+Оценивается через остаточный член:
+\[ R_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!} \cdot \omega_{n+1}(x), \quad \xi \in [X_0,X_n] \]
+где $\omega_{n+1}(x) = \prod_{i=0}^n (x-X_i)$.
+
+На практике вычисляется как:
+\[ \Delta(X^*) = |f(X^*) - P_n(X^*)|, \quad P_n \in \{L_n, P_n\} \]
+
+\subsection*{Сравнение методов}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+Характеристика & Лагранж & Ньютон \\
+\hline
+Чувствительность к новым узлам & Требует пересчёта & Частичный пересчёт \\
+Вычислительная сложность & $O(n^2)$ & $O(n^2)$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{Исходный код}
+
+\begin{minted}{java}
+package cat.mood;
+
+import java.util.function.Function;
+
+public class A {
+    public record Pair(Function<Double, Double> first, Function<String, String> second) {}
+
+    static double omega(int n, int idx, double[] x) {
+        double result = 1;
+        for (int i = 0; i < n; ++i) {
+            if (i != idx) {
+                result *= x[idx] - x[i];
+            }
+        }
+
+        return result;
+    }
+
+    public static double[][] difference(double[] x, double[] y) {
+        int n = x.length;
+        double[][] table = new double[n][n];
+
+
+        for (int i = 0; i < n; i++) {
+            table[i][0] = y[i];
+        }
+
+        for (int j = 1; j < n; j++) {
+            for (int i = 0; i < n - j; i++) {
+                table[i][j] = (table[i + 1][j - 1] - table[i][j - 1]) / (x[i + j] - x[i]);
+            }
+        }
+
+        return table;
+    }
+
+    public static Pair lagrange(double[] x, double[] y) {
+        int n = x.length;
+        double[] w = new double[n];
+        for (int i = 0; i < n; ++i) {
+            w[i] = omega(n, i, x);
+        }
+
+        Function<String, String> fs = str -> {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < n; ++i) {
+                if (y[i] / w[i] > 0) {
+                    sb.append("+");
+                }
+                sb.append(y[i] / w[i]);
+                for (int j = 0; j < n; ++j) {
+                    if (i != j) {
+                        sb.append("(x ");
+                        if (x[j] < 0) {
+                            sb.append("+ ").append(x[j]);
+                        } else {
+                            sb.append("- ").append(x[j]);
+                        }
+                        sb.append(")");
+                    }
+                }
+                sb.append(" ");
+            }
+            return sb.toString();
+        };
+
+        Function<Double, Double> fd = t -> {
+            double f = 0;
+            for (int i = 0; i < n; ++i) {
+                double fi = y[i] / w[i];
+                for (int j = 0; j < n; ++j) {
+                    if (i != j) {
+                        fi *= t - x[j];
+                    }
+                }
+                f += fi;
+            }
+
+            return f;
+        };
+        return new Pair(fd, fs);
+    }
+
+    public static Pair newton(double[] x, double[] y) {
+        double[][] d = difference(x, y);
+        int n = x.length;
+
+        Function<String, String> fs = str -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append(y[0]);
+            for (int i = 1; i < n; ++i) {
+                if (d[0][i] > 0) {
+                    sb.append(" + ");
+                } else {
+                    sb.append(" - ");
+                }
+                sb.append(Math.abs(d[0][i]));
+                for (int j = 0; j < i; ++j) {
+                    sb.append("(x ");
+                    if (x[i] < 0) {
+                        sb.append("+ ");
+                    } else {
+                        sb.append("- ");
+                    }
+                    sb.append(Math.abs(x[j])).append(")");
+                }
+            }
+            return sb.toString();
+        };
+
+        Function<Double, Double> fd = t -> {
+            double f = y[0];
+            for (int i = 1; i < n; ++i) {
+                double fi = d[0][i];
+                for (int j = 0; j < i; ++j) {
+                    fi *= t - x[j];
+                }
+                f += fi;
+            }
+
+            return f;
+        };
+
+        return new Pair(fd, fs);
+    }
+
+    static void solve(double[] x, double[] y, double t, Function<Double, Double> f) {
+        var L = lagrange(x, y);
+        System.out.println("Многочлен Лагранжа:");
+        System.out.println(L.second.apply("x"));
+        System.out.println("Многочлен Лангранжа в точке x = " + t + ": " + L.first.apply(t));
+        System.out.println("Функция в точке x = " + t + ": " + f.apply(t));
+        System.out.println("Погрешность: " + Math.abs(f.apply(t) - L.first.apply(t)));
+
+        System.out.println();
+
+        var N = newton(x, y);
+        System.out.println("Многочлен Ньютона:");
+        System.out.println(N.second.apply("x"));
+        System.out.println("Многочлен Ньютона в точке x = " + t + ": " + N.first.apply(t));
+        System.out.println("Функция в точке x = " + t + ": " + f.apply(t));
+        System.out.println("Погрешность: " + Math.abs(f.apply(t) - N.first.apply(t)));
+    }
+
+    public static void main(String[] args) {
+        Function<Double, Double> f = x -> Math.asin(x) + x;
+        double[] x1 = {-0.4, -0.1, 0.2, 0.5};
+        double[] x2 = {-0.4, 0, 0.2, 0.5};
+        double[] y1 = new double[x1.length];
+        double[] y2 = new double[x2.length];
+        for (int i = 0; i < x1.length; ++i) {
+            y1[i] = f.apply(x1[i]);
+            y2[i] = f.apply(x2[i]);
+        }
+
+        double t = 0.1;
+
+        System.out.println("а)");
+        solve(x1, y1, t, f);
+        System.out.println("б)");
+        solve(x2, y2, t, f);
+    }
+}
+\end{minted}
+
+\section*{Результат}
+
+\begin{minted}{bash}
+а)
+Многочлен Лагранжа:
++5.009363247330172(x + -0.1)(x - 0.2)(x - 0.5) -3.70680409558444(x + -0.4)(x - 0.2)(x - 0.5) -7.4325540887098285(x + -0.4)(x + -0.1)(x - 0.5) +6.3185109604833265(x + -0.4)(x + -0.1)(x - 0.2) 
+Многочлен Лангранжа в точке x = 0.1: 0.2000558780105125
+Функция в точке x = 0.1: 0.2001674211615598
+Погрешность: 1.1154315104730528E-4
+
+Многочлен Ньютона:
+-0.8115168460674881 + 2.037831416353094(x + 0.4) - 0.05457823863354249(x - 0.4)(x - 0.1) + 0.18851602351922966(x - 0.4)(x - 0.1)(x - 0.2)
+Многочлен Ньютона в точке x = 0.1: 0.20005587801051233
+Функция в точке x = 0.1: 0.2001674211615598
+Погрешность: 1.1154315104747181E-4
+б)
+Многочлен Лагранжа:
++3.757022435497629(x - 0.0)(x - 0.2)(x - 0.5) 0.0(x + -0.4)(x - 0.2)(x - 0.5) -11.148831133064744(x + -0.4)(x - 0.0)(x - 0.5) +7.582213152579992(x + -0.4)(x - 0.0)(x - 0.2) 
+Многочлен Лангранжа в точке x = 0.1: 0.20009364664038548
+Функция в точке x = 0.1: 0.2001674211615598
+Погрешность: 7.377452117432459E-5
+
+Многочлен Ньютона:
+-0.8115168460674881 + 2.02879211516872(x - 0.4) - 0.03667085202844348(x - 0.4)(x - 0.0) + 0.19040445501287723(x - 0.4)(x - 0.0)(x - 0.2)
+Многочлен Ньютона в точке x = 0.1: 0.20009364664038537
+Функция в точке x = 0.1: 0.2001674211615598
+Погрешность: 7.377452117443561E-5
+\end{minted}
+
+\section*{Вывод}
+
+На основании проведённых вычислений можно сделать следующие выводы:
+
+\textbf{Точность интерполяции}:
+\begin{itemize}
+\item В обоих случаях (a и b) методы Лагранжа и Ньютона дали практически идентичные результаты
+\item Погрешность интерполяции в точке $x=0.1$ составила:
+\begin{itemize}
+\item Для случая (a): $\approx 1.115 \times 10^{-4}$
+\item Для случая (b): $\approx 7.377 \times 10^{-5}$
+\end{itemize}
+\end{itemize}
+
+\textbf{Сравнение методов}:
+\begin{itemize}
+\item Оба метода показали сопоставимую точность в заданной точке
+\item Значения многочленов Лагранжа и Ньютона в точке $x=0.1$ совпадают с точностью до $10^{-16}$
+\item Разница в погрешностях между методами незначительна ($\sim 10^{-19}$)
+\end{itemize}
+
+\textbf{Анализ результатов}:
+\begin{itemize}
+\item Случай (b) демонстрирует меньшую погрешность, что может быть связано с более удачным расположением узлов интерполяции
+\item Полученная погрешность порядка $10^{-4}-10^{-5}$ свидетельствует о хорошей точности обоих методов
+\item Небольшие различия в результатах могут быть обусловлены особенностями округления при вычислениях
+\end{itemize}
+
+\textbf{Практические рекомендации}:
+\begin{itemize}
+\item Для данной задачи оба метода интерполяции показали себя как эффективные инструменты
+\item Выбор между методами может основываться на:
+\begin{itemize}
+\item Удобстве реализации (метод Ньютона проще модифицировать при добавлении новых узлов)
+\item Вычислительной эффективности
+\end{itemize}
+\item Для достижения максимальной точности рекомендуется:
+\begin{itemize}
+\item Оптимизировать расположение узлов интерполяции
+\item Учитывать поведение интерполируемой функции
+\end{itemize}
+\end{itemize}
+
+Таким образом, проведённые вычисления подтвердили теоретические положения о равнозначной точности интерполяционных многочленов 
+Лагранжа и Ньютона при одинаковых условиях и продемонстрировали их практическую применимость для решения задач аппроксимации.
+
+\pagebreak

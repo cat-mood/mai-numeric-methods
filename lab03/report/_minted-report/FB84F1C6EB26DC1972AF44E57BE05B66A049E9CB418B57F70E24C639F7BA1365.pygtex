@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Многочлен\PYG{+w}{ }\PYG{l+m}{1}\PYGZhy{}ой\PYG{+w}{ }степени:\PYG{+w}{ }\PYG{n+nv}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}.00552647619047623\PYG{+w}{ }+\PYG{+w}{ }\PYG{l+m}{2}.1067038095238093x
+Сумма\PYG{+w}{ }квадратов\PYG{+w}{ }ошибок\PYG{+w}{ }\PYG{o}{(}\PYG{l+m}{1}\PYGZhy{}ая\PYG{+w}{ }степень\PYG{o}{)}:\PYG{+w}{ }\PYG{l+m}{0}.003941661910476192
+Многочлен\PYG{+w}{ }\PYG{l+m}{2}\PYGZhy{}ой\PYG{+w}{ }степени:\PYG{+w}{ }\PYG{n+nv}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYGZhy{}0.006991698412698237\PYG{+w}{ }+\PYG{+w}{ }\PYG{l+m}{2}.1018891269841267x
++\PYG{+w}{ }\PYG{l+m}{0}.048146825396824876x\PYGZca{}2
+Сумма\PYG{+w}{ }квадратов\PYG{+w}{ }ошибок\PYG{+w}{ }\PYG{o}{(}\PYG{l+m}{2}\PYGZhy{}ая\PYG{+w}{ }степень\PYG{o}{)}:\PYG{+w}{ }\PYG{l+m}{0}.00324066339142856
+\end{Verbatim}

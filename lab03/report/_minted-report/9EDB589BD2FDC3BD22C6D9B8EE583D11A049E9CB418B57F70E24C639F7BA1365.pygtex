@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+Значение\PYG{+w}{ }сплайна\PYG{+w}{ }в\PYG{+w}{ }\PYG{n+nv}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0},100000:\PYG{+w}{ }\PYG{l+m}{0},201340
+Коэффициенты:
+\PYG{n+nv}{a}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{o}{[}\PYGZhy{}0.81152,\PYG{+w}{ }\PYGZhy{}0.20017,\PYG{+w}{ }\PYG{l+m}{0}.40136,\PYG{+w}{ }\PYG{l+m}{1}.0236,\PYG{+w}{ }\PYG{l+m}{1}.7273\PYG{o}{]}
+\PYG{n+nv}{b}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{o}{[}\PYG{l+m}{2}.0466833333333336,\PYG{+w}{ }\PYG{l+m}{2}.020133333333333,\PYG{+w}{ }\PYG{l+m}{2}.0015833333333335,\PYG{+w}{ }\PYG{l+m}{2}.211233333333334,\PYG{+w}{ }\PYG{l+m}{2}.3456666666666663\PYG{o}{]}
+\PYG{n+nv}{c}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{o}{[}\PYG{l+m}{0}.0,\PYG{+w}{ }\PYGZhy{}0.08850000000000198,\PYG{+w}{ }\PYG{l+m}{0}.026666666666670724,\PYG{+w}{ }\PYG{l+m}{0}.672166666666663,\PYG{+w}{ }\PYG{l+m}{0}.0\PYG{o}{]}
+\PYG{n+nv}{d}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{o}{[}\PYGZhy{}0.09833333333333552,\PYG{+w}{ }\PYG{l+m}{0}.12796296296296966,\PYG{+w}{ }\PYG{l+m}{0}.7172222222222138,\PYG{+w}{ }\PYGZhy{}0.7468518518518477,\PYG{+w}{ }\PYGZhy{}0.0\PYG{o}{]}
+\end{Verbatim}
