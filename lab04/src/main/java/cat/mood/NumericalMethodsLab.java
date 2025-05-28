@@ -155,7 +155,7 @@ public class NumericalMethodsLab {
     }
 
     public static void main(String[] args) {
-        // Ваш вариант уравнения:
+        // Уравнение:
         // y'' + 1/x * y' + 2/x * y = 0
         // Преобразуем в систему:
         // y' = z
@@ -168,7 +168,7 @@ public class NumericalMethodsLab {
 
             @Override
             public double g(double x, double y, double z) {
-                return -1/x * z - 2/x * y;
+                return -1.0/x * z - 2.0/x * y;
             }
         };
 
@@ -192,21 +192,27 @@ public class NumericalMethodsLab {
         double x0 = 1.0;
         double y0 = 1.0;
         double z0 = 1.0;
-        double h = 0.1;
-        int steps = 10;
+        double h = 0.025;
+        int steps = 40;
+
 
         // Решение разными методами
         System.out.println("Метод Эйлера:");
         double[][] eulerSolution = eulerMethod(ode, exact, x0, y0, z0, h, steps);
         printSolution(eulerSolution);
+//        GraphPlotter.plotSolutions(eulerSolution, "Метод Эйлера");
 
         System.out.println("\nМетод Рунге-Кутты 4-го порядка:");
         double[][] rk4Solution = rungeKutta4(ode, exact, x0, y0, z0, h, steps);
         printSolution(rk4Solution);
+//        GraphPlotter.plotSolutions(eulerSolution, "Метод Рунге-Кутты 4-го порядка");
 
         System.out.println("\nМетод Адамса 4-го порядка:");
         double[][] adamsSolution = adams4(ode, exact, x0, y0, z0, h, steps);
         printSolution(adamsSolution);
+//        GraphPlotter.plotSolutions(eulerSolution, "Метод Адамса 4-го порядка");
+
+        GraphPlotter.plotAllSolutions(eulerSolution, rk4Solution, adamsSolution);
 
         // Оценка погрешности методом Рунге-Ромберга
         double h2 = h / 2;
@@ -215,8 +221,8 @@ public class NumericalMethodsLab {
         double[][] rk4SolutionH = rungeKutta4(ode, exact, x0, y0, z0, h, steps);
         double[][] rk4SolutionH2 = rungeKutta4(ode, exact, x0, y0, z0, h2, steps2);
 
-        double rrError = rungeRombergError(rk4SolutionH, rk4SolutionH2, 4);
-        System.out.printf("\nОценка погрешности методом Рунге-Ромберга: %.8f\n", rrError);
+//        double rrError = rungeRombergError(rk4SolutionH, rk4SolutionH2, 4);
+//        System.out.printf("\nОценка погрешности методом Рунге-Ромберга: %.8f\n", rrError);
     }
 
     // Вспомогательная функция для вывода результатов

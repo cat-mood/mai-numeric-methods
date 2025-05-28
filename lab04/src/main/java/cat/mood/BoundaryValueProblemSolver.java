@@ -5,8 +5,8 @@ import java.util.Arrays;
 public class BoundaryValueProblemSolver {
 
     interface ODEFunction {
-        double f(double x, double y, double z);
-        double g(double x, double y, double z);
+        double f(double x, double y, double z); // z = y'
+        double g(double x, double y, double z); // z' = y''
     }
 
     interface ExactSolution {
@@ -14,21 +14,21 @@ public class BoundaryValueProblemSolver {
         double z(double x);
     }
 
-    // Метод стрельбы для смешанных граничных условий
+    // Метод стрельбы для краевых условий y(a) = ya, y(b) = yb
     public static double[][] shootingMethod(ODEFunction ode, ExactSolution exact,
-                                            double a, double b, double alpha, double beta, double gamma,
+                                            double a, double b, double ya, double yb,
                                             double h, double eps) {
-        // Начальные предположения для y(a)
+        // Начальные предположения для y'(a)
         double eta0 = 1.0;
         double eta1 = 0.5;
 
-        // Решаем задачу Коши с начальными условиями y'(a)=alpha, y(a)=eta0
-        double[][] sol0 = rungeKutta4System(ode, a, eta0, alpha, h, (int)((b-a)/h));
-        double phi0 = beta*sol0[sol0.length-1][1] + gamma*sol0[sol0.length-1][2] - 23*Math.exp(-4);
+        // Первое приближение
+        double[][] sol0 = rungeKutta4System(ode, a, ya, eta0, h, (int)((b-a)/h));
+        double phi0 = sol0[sol0.length-1][1] - yb;
 
-        // Решаем задачу Коши с начальными условиями y'(a)=alpha, y(a)=eta1
-        double[][] sol1 = rungeKutta4System(ode, a, eta1, alpha, h, (int)((b-a)/h));
-        double phi1 = beta*sol1[sol1.length-1][1] + gamma*sol1[sol1.length-1][2] - 23*Math.exp(-4);
+        // Второе приближение
+        double[][] sol1 = rungeKutta4System(ode, a, ya, eta1, h, (int)((b-a)/h));
+        double phi1 = sol1[sol1.length-1][1] - yb;
 
         // Метод секущих для нахождения правильного eta
         double eta = eta1;
@@ -42,23 +42,23 @@ public class BoundaryValueProblemSolver {
             eta1 = etaNew;
             phi0 = phi1;
 
-            double[][] solNew = rungeKutta4System(ode, a, eta1, alpha, h, (int)((b-a)/h));
-            phi1 = beta*solNew[solNew.length-1][1] + gamma*solNew[solNew.length-1][2] - 23*Math.exp(-4);
+            double[][] solNew = rungeKutta4System(ode, a, ya, eta1, h, (int)((b-a)/h));
+            phi1 = solNew[solNew.length-1][1] - yb;
 
             eta = eta1;
             phi = phi1;
             iterations++;
         }
 
-        // Финальное решение с найденным eta
-        double[][] finalSolution = rungeKutta4System(ode, a, eta, alpha, h, (int)((b-a)/h));
+        // Финальное решение
+        double[][] finalSolution = rungeKutta4System(ode, a, ya, eta, h, (int)((b-a)/h));
 
         // Добавляем точные значения и погрешности
         double[][] result = new double[finalSolution.length][5];
         for (int i = 0; i < finalSolution.length; i++) {
             result[i][0] = finalSolution[i][0]; // x
             result[i][1] = finalSolution[i][1]; // y
-            result[i][2] = finalSolution[i][2]; // z
+            result[i][2] = finalSolution[i][2]; // z = y'
             result[i][3] = exact.y(finalSolution[i][0]); // y_exact
             result[i][4] = Math.abs(result[i][1] - result[i][3]); // error
         }
@@ -66,9 +66,9 @@ public class BoundaryValueProblemSolver {
         return result;
     }
 
-    // Исправленный конечно-разностный метод
+    // Конечно-разностный метод для y(a) = ya, y(b) = yb
     public static double[][] finiteDifferenceMethod(ODEFunction ode, ExactSolution exact,
-                                                    double a, double b, double alpha, double beta, double gamma,
+                                                    double a, double b, double ya, double yb,
                                                     double h) {
         int n = (int)((b - a)/h);
         double[] x = new double[n+1];
@@ -76,49 +76,49 @@ public class BoundaryValueProblemSolver {
             x[i] = a + i*h;
         }
 
-        // Коэффициенты для трехдиагональной системы
+        // Коэффициенты трехдиагональной системы
         double[] A = new double[n+1];
         double[] B = new double[n+1];
         double[] C = new double[n+1];
         double[] D = new double[n+1];
 
-        // Левое граничное условие y'(0) = 1 (используем одностороннюю разность)
+        // Левое граничное условие y(0) = 1
         A[0] = 0;
-        B[0] = -1.0;
-        C[0] = 1.0;
-        D[0] = h*alpha;
+        B[0] = 1;
+        C[0] = 0;
+        D[0] = ya;
 
-        // Правое граничное условие 4y(2) - y'(2) = 23e^-4 (используем одностороннюю разность)
-        A[n] = -1.0;
-        B[n] = beta*h + gamma;
-        C[n] = 0;
-        D[n] = h*23*Math.exp(-4);
-
-        // Заполняем коэффициенты для внутренних точек
+        // Внутренние точки
         for (int i = 1; i < n; i++) {
             double xi = x[i];
-            A[i] = 1.0 - h*2*xi; // Коэффициент при y_{i-1}
-            B[i] = -2.0 + h*h*(4*xi*xi + 2); // Коэффициент при y_i
-            C[i] = 1.0 + h*2*xi; // Коэффициент при y_{i+1}
-            D[i] = 0; // Правая часть
+            A[i] = 1 - 2*xi*h;             // y_{i-1}
+            B[i] = -2 + h*h*(4*xi*xi + 2);  // y_i
+            C[i] = 1 + 2*xi*h;              // y_{i+1}
+            D[i] = 0;                       // правая часть
         }
 
-        // Решаем трехдиагональную систему методом прогонки
+        // Правое граничное условие y(1) = 2/e
+        A[n] = 0;
+        B[n] = 1;
+        C[n] = 0;
+        D[n] = yb;
+
+        // Решаем систему
         double[] y = solveTridiagonalSystem(A, B, C, D);
 
-        // Создаем результат с вычисленными значениями z по конечно-разностной схеме
+        // Формируем результаты
         double[][] result = new double[n+1][5];
         for (int i = 0; i <= n; i++) {
             result[i][0] = x[i];
             result[i][1] = y[i];
 
-            // Вычисляем z = y' с помощью конечных разностей
+            // Вычисляем производные
             if (i == 0) {
-                result[i][2] = alpha; // используем граничное условие
+                result[i][2] = (-3*y[i] + 4*y[i+1] - y[i+2])/(2*h); // вперед
             } else if (i == n) {
-                result[i][2] = 4*y[i] - 23*Math.exp(-4); // из правого граничного условия
+                result[i][2] = (y[i-2] - 4*y[i-1] + 3*y[i])/(2*h); // назад
             } else {
-                result[i][2] = (y[i+1] - y[i-1])/(2*h); // центральная разность
+                result[i][2] = (y[i+1] - y[i-1])/(2*h); // центральная
             }
 
             result[i][3] = exact.y(x[i]);
@@ -128,33 +128,7 @@ public class BoundaryValueProblemSolver {
         return result;
     }
 
-    // Исправленный метод прогонки
-    private static double[] solveTridiagonalSystem(double[] A, double[] B, double[] C, double[] D) {
-        int n = B.length - 1;
-        double[] alpha = new double[n+1];
-        double[] beta = new double[n+1];
-
-        // Прямой ход
-        alpha[1] = C[0]/B[0];
-        beta[1] = D[0]/B[0];
-
-        for (int i = 1; i < n; i++) {
-            double denominator = B[i] - A[i]*alpha[i];
-            alpha[i+1] = C[i] / denominator;
-            beta[i+1] = (D[i] - A[i]*beta[i]) / denominator;
-        }
-
-        // Обратный ход
-        double[] y = new double[n+1];
-        y[n] = (D[n] - A[n]*beta[n]) / (B[n] - A[n]*alpha[n]);
-
-        for (int i = n-1; i >= 0; i--) {
-            y[i] = alpha[i+1]*y[i+1] + beta[i+1];
-        }
-
-        return y;
-    }
-
+    // Метод Рунге-Кутты 4-го порядка для системы
     private static double[][] rungeKutta4System(ODEFunction ode, double x0, double y0, double z0,
                                                 double h, int steps) {
         double[][] result = new double[steps+1][3];
@@ -187,20 +161,31 @@ public class BoundaryValueProblemSolver {
         return result;
     }
 
-    public static double rungeRombergError(double[][] solutionH, double[][] solutionH2, int p) {
-        double maxError = 0.0;
-        int n = solutionH.length;
+    // Метод прогонки для трехдиагональной системы
+    private static double[] solveTridiagonalSystem(double[] A, double[] B, double[] C, double[] D) {
+        int n = B.length - 1;
+        double[] cp = new double[n+1];
+        double[] dp = new double[n+1];
 
-        for (int i = 0; i < n; i++) {
-            double yH = solutionH[i][1];
-            double yH2 = solutionH2[2*i][1];
-            double error = Math.abs(yH - yH2) / (Math.pow(2, p) - 1);
-            if (error > maxError) {
-                maxError = error;
-            }
+        // Прямой ход
+        cp[0] = C[0]/B[0];
+        dp[0] = D[0]/B[0];
+
+        for (int i = 1; i <= n; i++) {
+            double m = 1.0/(B[i] - A[i]*cp[i-1]);
+            cp[i] = C[i]*m;
+            dp[i] = (D[i] - A[i]*dp[i-1])*m;
         }
 
-        return maxError;
+        // Обратный ход
+        double[] y = new double[n+1];
+        y[n] = dp[n];
+
+        for (int i = n-1; i >= 0; i--) {
+            y[i] = dp[i] - cp[i]*y[i+1];
+        }
+
+        return y;
     }
 
     public static void main(String[] args) {
@@ -208,12 +193,12 @@ public class BoundaryValueProblemSolver {
         ODEFunction ode = new ODEFunction() {
             @Override
             public double f(double x, double y, double z) {
-                return z;
+                return z; // y' = z
             }
 
             @Override
             public double g(double x, double y, double z) {
-                return -4*x*z - (4*x*x + 2)*y;
+                return -4*x*z - (4*x*x + 2)*y; // z' = y''
             }
         };
 
@@ -232,39 +217,27 @@ public class BoundaryValueProblemSolver {
 
         // Параметры задачи
         double a = 0.0;
-        double b = 2.0;
-        double alpha = 1.0; // y'(0) = 1
-        double beta = 4.0;  // 4y(2) - y'(2) = 23e^-4
-        double gamma = -1.0;
+        double b = 1.0;
+        double ya = 1.0;          // y(0) = 1
+        double yb = 2.0/Math.E;   // y(1) = 2/e
         double h = 0.1;
         double eps = 1e-6;
 
         // Решение методом стрельбы
         System.out.println("Метод стрельбы:");
-        double[][] shootingSolution = shootingMethod(ode, exact, a, b, alpha, beta, gamma, h, eps);
+        double[][] shootingSolution = shootingMethod(ode, exact, a, b, ya, yb, h, eps);
         printSolution(shootingSolution);
+        BVPGraphPlotter.plotSolutions(shootingSolution, "Метод стрельбы");
 
         // Решение конечно-разностным методом
         System.out.println("\nКонечно-разностный метод:");
-        double[][] fdSolution = finiteDifferenceMethod(ode, exact, a, b, alpha, beta, gamma, h);
+        double[][] fdSolution = finiteDifferenceMethod(ode, exact, a, b, ya, yb, h);
         printSolution(fdSolution);
-
-        // Оценка погрешности методом Рунге-Ромберга для метода стрельбы
-        double h2 = h/2;
-        double[][] shootingSolutionH = shootingMethod(ode, exact, a, b, alpha, beta, gamma, h, eps);
-        double[][] shootingSolutionH2 = shootingMethod(ode, exact, a, b, alpha, beta, gamma, h2, eps);
-        double rrErrorShooting = rungeRombergError(shootingSolutionH, shootingSolutionH2, 4);
-        System.out.printf("\nОценка погрешности метода стрельбы (Рунге-Ромберг): %.8f\n", rrErrorShooting);
-
-        // Оценка погрешности методом Рунге-Ромберга для конечно-разностного метода
-        double[][] fdSolutionH = finiteDifferenceMethod(ode, exact, a, b, alpha, beta, gamma, h);
-        double[][] fdSolutionH2 = finiteDifferenceMethod(ode, exact, a, b, alpha, beta, gamma, h2);
-        double rrErrorFD = rungeRombergError(fdSolutionH, fdSolutionH2, 2);
-        System.out.printf("Оценка погрешности конечно-разностного метода (Рунге-Ромберг): %.8f\n", rrErrorFD);
+        BVPGraphPlotter.plotSolutions(fdSolution, "Конечно-разностный метод");
     }
 
     private static void printSolution(double[][] solution) {
-        System.out.println("x\t\ty числ.\t\ty точн.\t\tПогрешность\tz числ.");
+        System.out.println("x\t\ty числ.\t\ty точн.\t\tПогрешность\ty' числ.");
         for (double[] row : solution) {
             System.out.printf("%.4f\t%.8f\t%.8f\t%.8f\t%.8f\n",
                     row[0], row[1], row[3], row[4], row[2]);
