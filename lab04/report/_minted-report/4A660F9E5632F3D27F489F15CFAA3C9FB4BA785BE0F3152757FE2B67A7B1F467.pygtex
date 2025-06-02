@@ -1,0 +1,238 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{package}\PYG{+w}{ }\PYG{n+nn}{cat.mood}\PYG{p}{;}
+
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{java.util.Arrays}\PYG{p}{;}
+
+\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kd}{class} \PYG{n+nc}{NumericalMethodsLab}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+
+\PYG{+w}{    }\PYG{c+c1}{// Функции, определяющие систему ОДУ}
+\PYG{+w}{    }\PYG{k+kd}{interface} \PYG{n+nc}{ODEFunction}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{f}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{z}\PYG{p}{);}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{g}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{z}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{c+c1}{// Точное решение для сравнения}
+\PYG{+w}{    }\PYG{k+kd}{interface} \PYG{n+nc}{ExactSolution}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{y}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{);}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{z}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{c+c1}{// Решение методом Эйлера}
+\PYG{+w}{    }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kd}{static}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n+nf}{eulerMethod}\PYG{p}{(}\PYG{n}{ODEFunction}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ExactSolution}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{,}
+\PYG{+w}{                                         }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{,}
+\PYG{+w}{                                         }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{steps}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{result}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{[}\PYG{n}{steps}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{5}\PYG{o}{]}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// x, y, z, y\PYGZus{}exact, error}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{.}\PYG{n+na}{y}\PYG{p}{(}\PYG{n}{x0}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{4}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{0.0}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{steps}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{dy}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{f}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{dz}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{g}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{dy}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{dz}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{.}\PYG{n+na}{y}\PYG{p}{(}\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{4}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{abs}\PYG{p}{(}\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{result}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{c+c1}{// Решение методом Рунге\PYGZhy{}Кутты 4\PYGZhy{}го порядка}
+\PYG{+w}{    }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kd}{static}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n+nf}{rungeKutta4}\PYG{p}{(}\PYG{n}{ODEFunction}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ExactSolution}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{,}
+\PYG{+w}{                                         }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{,}
+\PYG{+w}{                                         }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{steps}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{result}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{[}\PYG{n}{steps}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{5}\PYG{o}{]}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// x, y, z, y\PYGZus{}exact, error}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{.}\PYG{n+na}{y}\PYG{p}{(}\PYG{n}{x0}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{4}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{0.0}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{steps}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{c+c1}{// Коэффициенты для y}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{k1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{f}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{l1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{g}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{k2}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{f}\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k1}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{l1}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{l2}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{g}\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k1}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{l1}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{k3}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{f}\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k2}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{l2}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{l3}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{g}\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k2}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{l2}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{k4}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{f}\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k3}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{l3}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{l4}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{g}\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k3}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{l3}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{k1}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{k2}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{k3}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{k4}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{6}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{l1}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{l2}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{l3}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{l4}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{6}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{.}\PYG{n+na}{y}\PYG{p}{(}\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{4}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{abs}\PYG{p}{(}\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{result}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{c+c1}{// Решение методом Адамса 4\PYGZhy{}го порядка}
+\PYG{+w}{    }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kd}{static}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n+nf}{adams4}\PYG{p}{(}\PYG{n}{ODEFunction}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ExactSolution}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{,}
+\PYG{+w}{                                    }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{,}
+\PYG{+w}{                                    }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{steps}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{// Для Адамса нужны 4 начальные точки, используем Рунге\PYGZhy{}Кутта}
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{steps}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IllegalArgumentException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Для метода Адамса нужно минимум 4 точки (steps \PYGZgt{}= 3)\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{result}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{[}\PYG{n}{steps}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{5}\PYG{o}{]}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// x, y, z, y\PYGZus{}exact, error}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{.}\PYG{n+na}{y}\PYG{p}{(}\PYG{n}{x0}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{result}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{][}\PYG{l+m+mi}{4}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{0.0}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{c+c1}{// Первые 3 точки получаем методом Рунге\PYGZhy{}Кутта}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{rkStart}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rungeKutta4}\PYG{p}{(}\PYG{n}{ode}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{);}
+\PYG{+w}{        }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{arraycopy}\PYG{p}{(}\PYG{n}{rkStart}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{// Массивы для хранения предыдущих значений производных}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[]}\PYG{+w}{ }\PYG{n}{fPrev}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{[}\PYG{l+m+mi}{4}\PYG{o}{]}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[]}\PYG{+w}{ }\PYG{n}{gPrev}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{[}\PYG{l+m+mi}{4}\PYG{o}{]}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{c+c1}{// Заполняем предыдущие значения производных}
+\PYG{+w}{        }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{fPrev}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{f}\PYG{p}{(}\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{gPrev}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{g}\PYG{p}{(}\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{// Основной цикл метода Адамса}
+\PYG{+w}{        }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{steps}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{c+c1}{// Вычисляем новые значения y и z}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{55}\PYG{o}{*}\PYG{n}{fPrev}\PYG{o}{[}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{59}\PYG{o}{*}\PYG{n}{fPrev}\PYG{o}{[}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{37}\PYG{o}{*}\PYG{n}{fPrev}\PYG{o}{[}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{o}{*}\PYG{n}{fPrev}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{24}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{55}\PYG{o}{*}\PYG{n}{gPrev}\PYG{o}{[}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{59}\PYG{o}{*}\PYG{n}{gPrev}\PYG{o}{[}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{37}\PYG{o}{*}\PYG{n}{gPrev}\PYG{o}{[}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{9}\PYG{o}{*}\PYG{n}{gPrev}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{24}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{.}\PYG{n+na}{y}\PYG{p}{(}\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{c+c1}{// Обновляем массив предыдущих значений производных}
+\PYG{+w}{            }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{arraycopy}\PYG{p}{(}\PYG{n}{fPrev}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{fPrev}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{arraycopy}\PYG{p}{(}\PYG{n}{gPrev}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{gPrev}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{fPrev}\PYG{o}{[}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{f}\PYG{p}{(}\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{gPrev}\PYG{o}{[}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{ode}\PYG{p}{.}\PYG{n+na}{g}\PYG{p}{(}\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{4}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{abs}\PYG{p}{(}\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{result}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{result}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{c+c1}{// Метод Рунге\PYGZhy{}Ромберга для оценки погрешности}
+\PYG{+w}{    }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kd}{static}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{rungeRombergError}\PYG{p}{(}\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{solutionH}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{solutionH2}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{solutionH}\PYG{p}{.}\PYG{n+na}{length}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{error}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{0.0}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{yH}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{solutionH}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{yH2}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{solutionH2}\PYG{o}{[}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{currentError}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{abs}\PYG{p}{(}\PYG{n}{yH}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{yH2}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{pow}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{currentError}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{error}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{error}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{currentError}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{error}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kd}{static}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{main}\PYG{p}{(}\PYG{n}{String}\PYG{o}{[]}\PYG{+w}{ }\PYG{n}{args}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{// Уравнение:}
+\PYG{+w}{        }\PYG{c+c1}{// y\PYGZsq{}\PYGZsq{} + 1/x * y\PYGZsq{} + 2/x * y = 0}
+\PYG{+w}{        }\PYG{c+c1}{// Преобразуем в систему:}
+\PYG{+w}{        }\PYG{c+c1}{// y\PYGZsq{} = z}
+\PYG{+w}{        }\PYG{c+c1}{// z\PYGZsq{} = \PYGZhy{}1/x * z \PYGZhy{} 2/x * y}
+\PYG{+w}{        }\PYG{n}{ODEFunction}\PYG{+w}{ }\PYG{n}{ode}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{ODEFunction}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n+nd}{@Override}
+\PYG{+w}{            }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{f}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{z}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{z}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n+nd}{@Override}
+\PYG{+w}{            }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{g}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{z}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{1.0}\PYG{o}{/}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mf}{2.0}\PYG{o}{/}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{};}
+
+\PYG{+w}{        }\PYG{c+c1}{// Точное решение:}
+\PYG{+w}{        }\PYG{c+c1}{// y(x) = (cos2 \PYGZhy{} sin2) * cos(2x\PYGZca{}(1/2)) + (cos2 + sin2) * sin(2x\PYGZca{}(1/2))}
+\PYG{+w}{        }\PYG{n}{ExactSolution}\PYG{+w}{ }\PYG{n}{exact}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{ExactSolution}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n+nd}{@Override}
+\PYG{+w}{            }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{y}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{cos}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sin}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{))}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{cos}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sqrt}\PYG{p}{(}\PYG{n}{x}\PYG{p}{))}
+\PYG{+w}{                        }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{cos}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sin}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{))}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sin}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sqrt}\PYG{p}{(}\PYG{n}{x}\PYG{p}{));}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n+nd}{@Override}
+\PYG{+w}{            }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{z}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{cos}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sqrt}\PYG{p}{(}\PYG{n}{x}\PYG{p}{))}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{cos}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sin}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{+w}{                        }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sin}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sqrt}\PYG{p}{(}\PYG{n}{x}\PYG{p}{))}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sin}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{cos}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)))}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{sqrt}\PYG{p}{(}\PYG{n}{x}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{};}
+
+\PYG{+w}{        }\PYG{c+c1}{// Начальные условия}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{1.0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{1.0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{z0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{1.0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{0.025}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{steps}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{40}\PYG{p}{;}
+
+
+\PYG{+w}{        }\PYG{c+c1}{// Решение разными методами}
+\PYG{+w}{        }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{out}\PYG{p}{.}\PYG{n+na}{println}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Метод Эйлера:\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{eulerSolution}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{eulerMethod}\PYG{p}{(}\PYG{n}{ode}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{steps}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{printSolution}\PYG{p}{(}\PYG{n}{eulerSolution}\PYG{p}{);}
+\PYG{c+c1}{//        GraphPlotter.plotSolutions(eulerSolution, \PYGZdq{}Метод Эйлера\PYGZdq{});}
+
+\PYG{+w}{        }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{out}\PYG{p}{.}\PYG{n+na}{println}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZbs{}nМетод Рунге\PYGZhy{}Кутты 4\PYGZhy{}го порядка:\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{rk4Solution}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rungeKutta4}\PYG{p}{(}\PYG{n}{ode}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{steps}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{printSolution}\PYG{p}{(}\PYG{n}{rk4Solution}\PYG{p}{);}
+\PYG{c+c1}{//        GraphPlotter.plotSolutions(eulerSolution, \PYGZdq{}Метод Рунге\PYGZhy{}Кутты 4\PYGZhy{}го порядка\PYGZdq{});}
+
+\PYG{+w}{        }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{out}\PYG{p}{.}\PYG{n+na}{println}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZbs{}nМетод Адамса 4\PYGZhy{}го порядка:\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{adamsSolution}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{adams4}\PYG{p}{(}\PYG{n}{ode}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{steps}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{printSolution}\PYG{p}{(}\PYG{n}{adamsSolution}\PYG{p}{);}
+\PYG{c+c1}{//        GraphPlotter.plotSolutions(eulerSolution, \PYGZdq{}Метод Адамса 4\PYGZhy{}го порядка\PYGZdq{});}
+
+\PYG{+w}{        }\PYG{n}{GraphPlotter}\PYG{p}{.}\PYG{n+na}{plotAllSolutions}\PYG{p}{(}\PYG{n}{eulerSolution}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{rk4Solution}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{adamsSolution}\PYG{p}{);}
+
+\PYG{+w}{        }\PYG{c+c1}{// Оценка погрешности методом Рунге\PYGZhy{}Ромберга}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{h2}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{h}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{steps2}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{steps}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{rk4SolutionH}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rungeKutta4}\PYG{p}{(}\PYG{n}{ode}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{h}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{steps}\PYG{p}{);}
+\PYG{+w}{        }\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{rk4SolutionH2}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rungeKutta4}\PYG{p}{(}\PYG{n}{ode}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{exact}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{x0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{z0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{h2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{steps2}\PYG{p}{);}
+
+\PYG{c+c1}{//        double rrError = rungeRombergError(rk4SolutionH, rk4SolutionH2, 4);}
+\PYG{c+c1}{//        System.out.printf(\PYGZdq{}\PYGZbs{}nОценка погрешности методом Рунге\PYGZhy{}Ромберга: \PYGZpc{}.8f\PYGZbs{}n\PYGZdq{}, rrError);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{c+c1}{// Вспомогательная функция для вывода результатов}
+\PYG{+w}{    }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{k+kd}{static}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{printSolution}\PYG{p}{(}\PYG{k+kt}{double}\PYG{o}{[][]}\PYG{+w}{ }\PYG{n}{solution}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{out}\PYG{p}{.}\PYG{n+na}{println}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}x\PYGZbs{}t\PYGZbs{}ty числ.\PYGZbs{}t\PYGZbs{}ty точн.\PYGZbs{}t\PYGZbs{}tПогрешность\PYGZbs{}tz числ.\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{        }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{o}{[]}\PYG{+w}{ }\PYG{n}{row}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{solution}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{out}\PYG{p}{.}\PYG{n+na}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZpc{}.4f\PYGZbs{}t\PYGZpc{}.8f\PYGZbs{}t\PYGZpc{}.8f\PYGZbs{}t\PYGZpc{}.8f\PYGZbs{}t\PYGZpc{}.8f\PYGZbs{}n\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{n}{row}\PYG{o}{[}\PYG{l+m+mi}{0}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{row}\PYG{o}{[}\PYG{l+m+mi}{1}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{row}\PYG{o}{[}\PYG{l+m+mi}{3}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{row}\PYG{o}{[}\PYG{l+m+mi}{4}\PYG{o}{]}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{row}\PYG{o}{[}\PYG{l+m+mi}{2}\PYG{o}{]}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

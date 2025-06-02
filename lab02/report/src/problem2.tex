@@ -15,91 +15,241 @@ $$
 
 \section*{Описание}
 
-\subsection{Постановка задачи}
-Рассмотрим систему $n$ нелинейных уравнений с $n$ неизвестными:
-\begin{equation}
+Систему нелинейных уравнений с $n$ неизвестными можно записать в виде
+
+\begin{equation}\label{eq:pythagoras}
 \begin{cases}
-f_1(x_1, x_2, ..., x_n) = 0 \
-f_2(x_1, x_2, ..., x_n) = 0 \
-\vdots \
-f_n(x_1, x_2, ..., x_n) = 0
+f_1(x_1, x_2, ..., x_n) = 0 \\
+f_2(x_1, x_2, ..., x_n) = 0 \\
+... \\
+f_n(x_1, x_2, ..., x_n) = 0 \\
 \end{cases}
 \end{equation}
 
-Требуется найти решение $\mathbf{x}^* = (x_1^, x_2^, ..., x_n^*)^T$ с положительными компонентами.
+или, более коротко, в векторной форме
 
-\subsection*{Метод простой итерации}
-
-Преобразуем систему к виду:
-\begin{equation}
-\mathbf{x} = \Phi(\mathbf{x})
-\end{equation}
-где $\Phi = (\varphi_1, \varphi_2, ..., \varphi_n)^T$ - вектор-функция итерационного преобразования.
-
-Итерационный процесс:
-\begin{equation}
-\mathbf{x}^{(k+1)} = \Phi(\mathbf{x}^{(k)}), \quad k=0,1,2,...
+\begin{equation}\label{eq:pythagoras}
+\mathbf{f}(\mathbf{x}) = \mathbf{0}
 \end{equation}
 
-\subsubsection*{Условия сходимости}
-\begin{itemize}
-\item $\Phi$ отображает замкнутое множество $D \subset \mathbb{R}^n$ в себя
-\item Существует $q < 1$: $|\Phi'(\mathbf{x})| \leq q$ для всех $\mathbf{x} \in D$
-\end{itemize}
+где $x$ --- вектор неизвестных величин, $f$ --- вектор-функция
 
-\subsubsection*{Критерий остановки}
-\begin{equation}
-|\mathbf{x}^{(k+1)} - \mathbf{x}^{(k)}| < \varepsilon
-\end{equation}
+$$
+x = 
+\begin{pmatrix}
+    x_1 \\
+    x_2 \\
+    \vdots \\
+    x_n \\
+\end{pmatrix}
+\ \
+f =
+\begin{pmatrix}
+    f_1(x) \\
+    f_2(x) \\
+    \vdots \\
+    f_n(x) \\
+\end{pmatrix}
+\ \
+\mathbf{0} =
+\begin{pmatrix}
+    0 \\
+    0 \\
+    \vdots \\
+    0
+\end{pmatrix}
+$$
+
+В редких случаях для решения такой системы удается применить метод
+последовательного исключения неизвестных и свести решение исходной задачи к
+решению одного нелинейного уравнения с одним неизвестным. Значения других
+неизвестных величин находятся соответствующей подстановкой в конкретные выражения.
+Однако в подавляющем большинстве случаев для решения систем нелинейных уравнений
+используются итерационные методы.
 
 \subsection*{Метод Ньютона}
 
-Линеаризуем систему в окрестности текущего приближения:
-\begin{equation}
-\mathbf{x}^{(k+1)} = \mathbf{x}^{(k)} - J^{-1}(\mathbf{x}^{(k)}) \mathbf{f}(\mathbf{x}^{(k)})
-\end{equation}
-где $J(\mathbf{x})$ - матрица Якоби:
-\begin{equation}
-J(\mathbf{x}) = \begin{pmatrix}
-\frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n} \
-\vdots & \ddots & \vdots \
-\frac{\partial f_n}{\partial x_1} & \cdots & \frac{\partial f_n}{\partial x_n}
+Если определено начальное приближение $\mathbf{x^{(0)} = (x_1^{(0)}, x_2^{(0)}, ..., x_n^{(0)})^T}$,
+итерационный процесс нахождения решения системы методом Ньютона можно
+представить в виде
+
+\begin{equation}\label{eq:pythagoras}
+\begin{pmatrix}
+    x_1^{(k+1)} = x_1^{(k)} + \Delta x_1^{(k)} \\
+    x_2^{(k+1)} = x_2^{(k)} + \Delta x_2^{(k)} \\
+    ... \\
+    x_n^{(k+1)} = x_n^{(k)} + \Delta x_n^{(k)} \\
 \end{pmatrix}
 \end{equation}
 
-\subsubsection*{Условия сходимости}
-\begin{itemize}
-\item $J(\mathbf{x})$ невырождена в окрестности решения
-\item Начальное приближение $\mathbf{x}^{(0)}$ достаточно близко к $\mathbf{x}^*$
-\end{itemize}
+$k = 0, 1, 2, ...$
 
-\subsubsection*{Модификации}
-\begin{itemize}
-\item Метод Ньютона-Рафсона (аналитическое вычисление Якобиана)
-\item Квазиньютоновские методы (численное дифференцирование)
-\end{itemize}
+где значения приращений $\Delta x_1^{(k)}, \Delta x_2^{(k)}, ..., \Delta x_n^{(k)}$ определяются из решения системы
+линейных алгебраических уравнений, все коэффициенты которой выражаются через
+известное предыдущее приближение $x^{(k)} = (x_1^{(k)}, x_2^{(k)}, ..., x_n^{(k)})^T$
 
-\subsection*{Практическая реализация}
+\begin{equation}\label{eq:pythagoras}
+\begin{cases}
+    f_1(x^{(k)}) + \frac{\partial f_1(x^{(k)})}{\partial x_1} \Delta x_1^{(k)} + \frac{\partial f_1(x^{(k)})}{\partial x_2} \Delta x_2^{(k)}
+    + ... + \frac{\partial f_1(x^{(k)})}{\partial x_n} \Delta x_n{(k)} = 0 \\
+    f_2(x^{(k)}) + \frac{\partial f_2(x^{(k)})}{\partial x_1} \Delta x_1^{(k)} + \frac{\partial f_2(x^{(k)})}{\partial x_2} \Delta x_2^{(k)}
+    + ... + \frac{\partial f_2(x^{(k)})}{\partial x_n} \Delta x_n{(k)} = 0 \\
+    ... \\
+    f_n(x^{(k)}) + \frac{\partial f_n(x^{(k)})}{\partial x_1} \Delta x_1^{(k)} + \frac{\partial f_n(x^{(k)})}{\partial x_2} \Delta x_2^{(k)}
+    + ... + \frac{\partial f_n(x^{(k)})}{\partial x_n} \Delta x_n{(k)} = 0 \\
+\end{cases}
+\end{equation}
 
-\subsubsection*{Выбор начального приближения}
-\begin{itemize}
-\item Графический анализ для систем 2-го порядка
-\item Метод продолжения по параметру для систем высших порядков
-\end{itemize}
+В векторно-матричной форме расчетные формулы имеют вид
 
-\subsubsection*{Анализ погрешности}
-\begin{itemize}
-\item Метод простой итерации: линейная зависимость $\ln|\mathbf{e}^{(k)}|$ от $k$
-\item Метод Ньютона: квадратичная зависимость $\ln\ln|\mathbf{e}^{(k)}|$ от $k$
-\end{itemize}
+\begin{equation}\label{eq:pythagoras}
+x^{(k + 1)} = x^{(k)} + \Delta x^{(k)}
+\end{equation}
 
-\subsubsection*{Критерии сравнения методов}
-\begin{itemize}
-\item Скорость сходимости
-\item Вычислительная сложность одной итерации
-\item Устойчивость к выбору начального приближения
-\item Требования к гладкости функций
-\end{itemize}
+$k = 0, 1, 2, ...$
+
+где вектор приращений
+$
+\Delta x^{(k)} = 
+\begin{pmatrix}
+    \Delta x_1^{(k)} \\
+    \Delta x_2^{(k)} \\
+    \vdots \\
+    \Delta x_n^{(k)} \\
+\end{pmatrix}
+$
+находится из решения уравнения
+
+\begin{equation}\label{eq:pythagoras}
+f(x^{(k)}) + J(x^{(k)}) \Delta x^{(k)} = 0
+\end{equation}
+
+Здесь
+$
+J(x) =
+\begin{pmatrix}
+\frac{\partial f_1(x)}{\partial x_1} & \frac{\partial f_1(x)}{\partial x_2} & ... & \frac{\partial f_1(x)}{\partial x_n} \\
+\frac{\partial f_2(x)}{\partial x_1} & \frac{\partial f_2(x)}{\partial x_2} & ... & \frac{\partial f_2(x)}{\partial x_n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial f_n(x)}{\partial x_1} & \frac{\partial f_n(x)}{\partial x_2} & ... & \frac{\partial f_n(x)}{\partial x_n} \\
+\end{pmatrix}
+$
+--- матрица Якоби первых производных вектор-функции $f(x)$.
+
+Выражая из (6) вектор приращений $\Delta x^{(k)}$ и подставляя его в (5), итерационный процесс нахождения решения можно записать в виде
+
+\begin{equation}\label{eq:pythagoras}
+    x^{(k + 1)} = x^{(k)} - J^{-1}(x^{(k)})f(x^{(k)})
+\end{equation}
+
+$k = 0, 1, 2, ...$
+
+где $J^{-1}(x)$ --- матрица, обратная матрице Якоби. Формула (7) есть обобщение формулы
+(2.2) на случай систем нелинейных уравнений. 
+
+При реализации алгоритма метода Ньютона в большинстве случаев
+предпочтительным является не вычисление обратной матрицы $J^{-1}(x^{(k)})$, а нахождение из
+системы (4) значений приращений $\Delta x_1^{(k)}, \Delta x_2^{(k)}, ..., \Delta x_n^{(k)}$ и вычисление нового
+приближения по (3). Для решения таких линейных систем можно привлекать самые
+разные методы, как прямые, так и итерационные, с учетом размерности $n$ решаемой задачи и специфики матриц Якоби
+$J(x)$ (например, симметрии, разреженности и т.п.).
+
+Использование метода Ньютона предполагает дифференцируемость функций $f_1(x), f_2(x), ..., f_n(x)$ и невырожденность матрицы Якоби
+$\det J(x^{(k)}) \neq 0$. В случае, если
+начальное приближение выбрано в достаточно малой окрестности искомого корня,
+итерации сходятся к точному решению, причем сходимость квадратичная. В практических вычислениях в качестве условия окончания итераций обычно
+используется критерий
+
+\begin{equation}\label{eq:pythagoras}
+    \| x^{(k + 1)} - x^{(k)} \leq \varepsilon \|
+\end{equation}
+
+где $\varepsilon$ --- заданная точность.
+
+\subsection*{Метод итераций}
+
+При использовании метода простой итерации система
+уравнений (1) приводится к эквивалентной системе специального вида
+
+\begin{equation}\label{eq:pythagoras}
+    \begin{cases}
+        x_1 = \varphi_1 (x_1, x_2, ..., x_n) \\
+        x_2 = \varphi_2 (x_1, x_2, ..., x_n) \\
+        ... \\
+        x_n = \varphi_n (x_1, x_2, ..., x_n) \\
+    \end{cases}
+\end{equation}
+
+или, в векторной форме
+
+\begin{equation}\label{eq:pythagoras}
+    x = \varphi (x), \ \varphi (x) = 
+    \begin{pmatrix}
+        \varphi_1 (x) \\
+        \varphi_2 (x) \\
+        \vdots \\
+        \varphi_n (x) \\
+    \end{pmatrix}
+\end{equation}
+
+где функции $\varphi_1 (x), \varphi_2 (x), ..., \varphi_n (x)$ --- определены и непрерывны в некоторой окрестности
+искомого изолированного решения $x^{(*)} = (x_1^{(*)}, x_2^{(*)}, ..., x_n^{(*)})^T$.
+
+Если выбрано некоторое начальное приближение $x^{(0)} = (x_1^{(0)}, x_2^{(0)}, ..., x_n^{(0)})^T$, 
+последующие приближения в методе простой итерации находятся по формулам
+
+\begin{equation}\label{eq:pythagoras}
+    \begin{cases}
+        x_1^{(k + 1)} = \varphi_1 (x_1^{(k)}, x_2^{(k)}, ..., x_n^{(k)}) \\
+        x_2^{(k + 1)} = \varphi_2 (x_1^{(k)}, x_2^{(k)}, ..., x_n^{(k)}) \\
+        ... \\
+        x_n^{(k + 1)} = \varphi_n (x_1^{(k)}, x_2^{(k)}, ..., x_n^{(k)}) \\
+    \end{cases}
+\end{equation}
+
+или, в векторной форме
+
+\begin{equation}\label{eq:pythagoras}
+    x^{(k + 1)} = \varphi(x^{(k)})
+\end{equation}
+
+$k = 0, 1, 2, ...$.
+
+Если последовательность векторов $x^{(k)} = (x_1^{(k)}, x_2^{(k)}, ..., x_n^{(k)})^T$ сходится, то она сходится к
+решению $x^{(*)} = (x_1^{(*)}, x_2^{(*)}, ..., x_n^{(*)})^T$. Достаточное условие сходимости итерационного процесса (11) формулируется
+следующим образом
+
+\begin{theorem}
+Пусть вектор-функция $\varphi(x)$ непрерывна, вместе со своей производной
+\[
+\varphi'(x) =
+\begin{bmatrix}
+\frac{\partial \varphi_1(x)}{\partial x_1} & \frac{\partial \varphi_1(x)}{\partial x_2} & \cdots & \frac{\partial \varphi_1(x)}{\partial x_n} \\
+\frac{\partial \varphi_2(x)}{\partial x_1} & \frac{\partial \varphi_2(x)}{\partial x_2} & \cdots & \frac{\partial \varphi_2(x)}{\partial x_n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial \varphi_n(x)}{\partial x_1} & \frac{\partial \varphi_n(x)}{\partial x_2} & \cdots & \frac{\partial \varphi_n(x)}{\partial x_n}
+\end{bmatrix},
+\]
+в ограниченной выпуклой замкнутой области $G$ и
+\[
+\max_{x \in G} \|\varphi'(x)\| \leq q < 1
+\]
+где $q$ — постоянная. Если $x^{(0)} \in G$ и все последовательные приближения
+\[
+x^{(k+1)} = \varphi(x^{(k)}), \quad k = 0,1,2,\ldots
+\]
+также содержатся в $G$, то процесс итерации сходится к единственному решению уравнения
+\[
+x = \varphi(x)
+\]
+в области $G$ и справедливы оценки погрешности ($\forall k \in \mathbb{N}$):
+\[
+\|x^{(v)} - x^{(k+1)}\| \leq \frac{q^{k+1}}{1-q} \|x^{(1)} - x^{(0)}\|,
+\]
+\[
+\|x^{(v)} - x^{(k+1)}\| \leq \frac{q}{1-q} \|x^{(k+1)} - x^{(k)}\|.
+\]
+\end{theorem}
 
 \section*{Исходный код}
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.11.21)  26 MAY 2025 21:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.11.21)  2 JUN 2025 22:54
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -364,6 +364,18 @@ LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks24
+\thm@bodyfont=\toks25
+\thm@headfont=\toks26
+\thm@notefont=\toks27
+\thm@headpunct=\toks28
+\thm@preskip=\skip54
+\thm@postskip=\skip55
+\thm@headsep=\skip56
+\dth@everypar=\toks29
+)
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2024-01-20 v7.01h Hypertext links for LaTeX
 
@@ -372,7 +384,7 @@ Package: iftex 2022/02/03 v1.0f TeX engine tests
 )
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
-\KV@toks@=\toks24
+\KV@toks@=\toks30
 )
 (/usr/share/texlive/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
@@ -506,14 +518,14 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 85.
 )
-\Hy@SectionHShift=\skip54
+\Hy@SectionHShift=\skip57
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2023-11-01 v4.19 Multi-page Table package (DPC)
-\LTleft=\skip55
-\LTright=\skip56
-\LTpre=\skip57
-\LTpost=\skip58
+\LTleft=\skip58
+\LTright=\skip59
+\LTpre=\skip60
+\LTpost=\skip61
 \LTchunksize=\count287
 \LTcapwidth=\dimen155
 \LT@head=\box53
@@ -525,7 +537,7 @@ Package: longtable 2023-11-01 v4.19 Multi-page Table package (DPC)
 \LT@rows=\count289
 \c@LT@tables=\count290
 \c@LT@chunks=\count291
-\LT@p@ftn=\toks25
+\LT@p@ftn=\toks31
 )
 (/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2023/11/15 v3.01 LaTeX color extensions (UK)
@@ -557,19 +569,19 @@ Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
 \col@sep=\dimen156
 \ar@mcellbox=\box58
 \extrarowheight=\dimen157
-\NC@list=\toks26
-\extratabsurround=\skip59
-\backup@length=\skip60
+\NC@list=\toks32
+\extratabsurround=\skip62
+\backup@length=\skip63
 \ar@cellbox=\box59
 )
-\everycr=\toks27
-\minrowclearance=\skip61
+\everycr=\toks33
+\minrowclearance=\skip64
 \rownum=\count292
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count293
 \lst@gtempboxa=\box60
-\lst@token=\toks28
+\lst@token=\toks34
 \lst@length=\count294
 \lst@currlwidth=\dimen158
 \lst@column=\count295
@@ -602,7 +614,7 @@ Package: csquotes 2022-09-14 v5.2n context-sensitive quotations (JAW)
 \csq@qlevel=\count304
 \csq@maxlvl=\count305
 \csq@tshold=\count306
-\csq@ltx@everypar=\toks29
+\csq@ltx@everypar=\toks35
 
 (/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.def
 File: csquotes.def 2022-09-14 v5.2n csquotes generic definitions (JAW)
@@ -643,7 +655,7 @@ Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
 (/usr/share/texlive/texmf-dist/tex/latex/lineno/lineno.sty
 Package: lineno 2023/05/20 line numbers on paragraphs v5.3
 \linenopenalty=\count310
-\output=\toks30
+\output=\toks36
 \linenoprevgraf=\count311
 \linenumbersep=\dimen162
 \linenumberwidth=\dimen163
@@ -676,7 +688,7 @@ rning from the lineno package on input line 36.
 \c@FV@TrueTabGroupLevel=\count323
 \c@FV@TrueTabCounter=\count324
 \FV@TabBox@Group=\box64
-\FV@TmpLength=\skip62
+\FV@TmpLength=\skip65
 \c@FV@HighlightLinesStart=\count325
 \c@FV@HighlightLinesStop=\count326
 \FV@LoopCount=\count327
@@ -730,7 +742,7 @@ Package: xstring 2023/08/22 v1.86 String manipulations (CT)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty
 Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
-\OuterFrameSep=\skip63
+\OuterFrameSep=\skip66
 \fb@frw=\dimen173
 \fb@frh=\dimen174
 \FrameRule=\dimen175
@@ -739,9 +751,9 @@ Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
 (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count337
-\float@exts=\toks31
+\float@exts=\toks37
 \float@box=\box68
-\@float@everytoks=\toks32
+\@float@everytoks=\toks38
 \@floatcapt=\box69
 )
 \minted@appexistsfile=\read4
@@ -749,7 +761,7 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \minted@code=\write4
 \c@minted@FancyVerbLineTemp=\count338
 \c@minted@pygmentizecounter=\count339
-\@float@every@listing=\toks33
+\@float@every@listing=\toks39
 \c@listing=\count340
 )
 runsystem(mkdir -p _minted-report)...executed.
@@ -778,6 +790,7 @@ File: lstlang1.sty 2023/02/27 1.9 listings language file
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2023/02/27 1.9 (Carsten Heinz)
 ))
+\c@theorem=\count341
 runsystem(command -v pygmentize && touch report.aex)...executed.
 
 runsystem(rm report.aex)...executed.
@@ -785,14 +798,48 @@ runsystem(rm report.aex)...executed.
 
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count341
+\l__color_backend_stack_int=\count342
 \l__pdf_internal_box=\box71
 )
 
 LaTeX Warning: Unused global option(s):
     [pdf].
 
-(./report.aux)
+(./report.aux
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+
+LaTeX Warning: Label `eq:pythagoras' multiply defined.
+
+)
 \openout1 = `report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
@@ -824,17 +871,17 @@ Package hyperref Info: Link coloring OFF on input line 30.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count342
+\scratchcounter=\count343
 \scratchdimen=\dimen179
 \scratchbox=\box72
-\nofMPsegments=\count343
-\nofMParguments=\count344
-\everyMPshowfont=\toks34
-\MPscratchCnt=\count345
+\nofMPsegments=\count344
+\nofMParguments=\count345
+\everyMPshowfont=\toks40
+\MPscratchCnt=\count346
 \MPscratchDim=\dimen180
-\MPnumerator=\count346
-\makeMPintoPDFobject=\count347
-\everyMPtoPDFconversion=\toks35
+\MPnumerator=\count347
+\makeMPintoPDFobject=\count348
+\everyMPtoPDFconversion=\toks41
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -844,7 +891,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\c@lstlisting=\count348
+\c@lstlisting=\count349
 
 (./src/titlepage.tex
 LaTeX Font Info:    Trying to load font information for U+msa on input line 30.
@@ -859,12 +906,22 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]) (./src/problem1.tex
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 28--30
+
+ []
+
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.52 
-      [1]
+l.47 \[ f(x) = 0 \tag{2.1} \]
+                              [1] [2]
 \openout3 = `report.pyg'.
 
  (./_minted-report/default.pygstyle)
@@ -878,61 +935,76 @@ File: t2bcmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 LaTeX Font Info:    Font shape `T2B/cmtt/bx/n' in size <12> not available
 (Font)              Font shape `T2B/cmtt/m/n' tried instead on input line 2.
 
-[2] [3])
+[3] [4])
 \openout3 = `report.pyg'.
 
 
 (./_minted-report/41DBB5C1E687FCAB1DB8FB14E3BB174AA049E9CB418B57F70E24C639F7BA1
-365.pygtex [4])) [5] (./src/problem2.tex [6] [7]
+365.pygtex) [5]) [6] (./src/problem2.tex [7] [8]
+Overfull \hbox (66.68115pt too wide) in paragraph at lines 157--162
+[]\T2B/cmr/m/n/12 »спользование ме-то-да Ќью-то-на пред-по-ла-га-ет диф-фе-рен-
+ци-ру-е-мость функ-ций $\OML/cmm/m/it/12 f[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x
+\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 ; f[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x\OT1/
+cmr/m/n/12 )\OML/cmm/m/it/12 ; :::; f[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x\OT1/
+cmr/m/n/12 )$
+ []
+
+[9] [10]
 \openout3 = `report.pyg'.
 
 
 (./_minted-report/9264F2C2520881F78C13C5CA30FA0714B4BA785BE0F3152757FE2B67A7B1F
-467.pygtex [8] [9] [10] [11] [12] [13])
+467.pygtex [11] [12] [13] [14] [15] [16])
 \openout3 = `report.pyg'.
 
 
 (./_minted-report/AE048445DEFBE81FEDF88BDC423A7FCDA049E9CB418B57F70E24C639F7BA1
-365.pygtex) [14]) [15] (./report.aux)
+365.pygtex) [17]) [18] (./report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 6D98655268C2A52690646AD2E518AE54;184.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 runsystem(rm report.pyg)...executed.
 
  ) 
 Here is how much of TeX's memory you used:
- 17931 strings out of 475656
- 295935 string characters out of 5787140
- 1935975 words of memory out of 5000000
- 39604 multiletter control sequences out of 15000+600000
- 570622 words of font info for 68 fonts, out of 8000000 for 9000
+ 18040 strings out of 475656
+ 297738 string characters out of 5787140
+ 1940975 words of memory out of 5000000
+ 39698 multiletter control sequences out of 15000+600000
+ 569924 words of font info for 67 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
  92i,12n,95p,641b,890s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b/lbit1200.60
-0pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b/lbtt1200.
-600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1
-200.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b/lbr
-m1200.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b/l
-bbx1200.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b
-/lbbx1440.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t
-2b/lbbx1728.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex1
-0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/symbols/msbm10.pfb>
-Output written on report.pdf (16 pages, 232796 bytes).
+0pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm120
+0.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b/lbtt1
+200.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b/lbt
+i1200.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b/l
+brm1200.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t2b
+/lbbx1200.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh-t
+2b/lbbx1440.600pk> </home/cat-mood/.texlive2023/texmf-var/fonts/pk/ljfour/lh/lh
+-t2b/lbbx1728.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmb
+x8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/symbols/msbm10.pfb>
+Output written on report.pdf (19 pages, 269671 bytes).
 PDF statistics:
- 566 PDF objects out of 1000 (max. 8388607)
- 163 compressed objects within 2 object streams
- 48 named destinations out of 1000 (max. 500000)
- 9 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 638 PDF objects out of 1000 (max. 8388607)
+ 187 compressed objects within 2 object streams
+ 60 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
